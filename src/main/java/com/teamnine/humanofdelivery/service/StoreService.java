@@ -1,5 +1,6 @@
 package com.teamnine.humanofdelivery.service;
 
+import com.teamnine.humanofdelivery.StoreStatus;
 import com.teamnine.humanofdelivery.dto.StoreRequestDto;
 import com.teamnine.humanofdelivery.dto.StoreResponseDto;
 import com.teamnine.humanofdelivery.entity.Store;
@@ -21,6 +22,6 @@ public class StoreService {
     }
 
     public List<StoreResponseDto> findAll(String name) {
-        return storeRepository.findAllByStoreName(name).stream().map(StoreResponseDto::toDto).toList();
+        return storeRepository.findAllByStoreName(name, StoreStatus.SHUT).stream().map(StoreResponseDto::toDto).toList();
     }
 }
