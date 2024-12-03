@@ -18,6 +18,7 @@ public class StoreController {
 
     @PostMapping
     public ResponseEntity<StoreResponseDto> createStore(@RequestBody StoreRequestDto storeRequestDto) {
+        //TODO : 권한 확인 로직, 폐업 상태가 아닌 가게를 최대 3개까지만 생성가능
         StoreResponseDto createdStore = storeService.create(storeRequestDto);
         return new ResponseEntity<>(createdStore, HttpStatus.CREATED);
     }
@@ -26,5 +27,11 @@ public class StoreController {
     public ResponseEntity<List<StoreResponseDto>> findAllStore(@RequestParam String name) {
         List<StoreResponseDto> stores = storeService.findAll(name);
         return new ResponseEntity<>(stores, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<StoreResponseDto> storeShutdown(@PathVariable Long id, @RequestBody StoreRequestDto storeRequestDto) {
+        StoreResponseDto store = storeService.patchStoreStatus(id, storeRequestDto.getStatus());
+        return new ResponseEntity<>(store, HttpStatus.OK);
     }
 }
