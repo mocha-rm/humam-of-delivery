@@ -30,4 +30,16 @@ public class StoreResponseDto {
         this.createdAt = store.getCreatedDate();
         this.modifiedAt = store.getModDate();
     }
+
+    public static StoreResponseDto toDto(Store store) {
+        return new StoreResponseDto(
+                store.getId(),
+                store.getName(),
+                store.getStatus(),
+                store.getMinCost(),
+                store.getOpenAt(),
+                store.getCloseAt(),
+                store.getCreatedDate(),
+                store.getModDate());
+    }
 }
