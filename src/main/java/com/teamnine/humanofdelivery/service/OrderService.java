@@ -27,7 +27,7 @@ public class OrderService {
     @Transactional
     public OrderResponseDto create(OrderRequestDto orderRequestDto) {
         Store findStore = storeRepository.findById(orderRequestDto.getStoreId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 가게를 찾을 수 없습니다."));
-        //가게가 영업 중인지, 최소 주문 금액을 만족하는지?
+        //TODO : 가게가 영업 중인지, 최소 주문 금액을 만족하는지?
         if (!findStore.getStatus().equals(StoreStatus.OPEN)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "영업이 종료된 가게입니다.");
         }
@@ -38,5 +38,18 @@ public class OrderService {
         orderRepository.save(order);
 
         return new OrderResponseDto(order);
+    }
+
+    @Transactional
+    public OrderResponseDto patchOrderStatus(Long id, OrderRequestDto orderRequestDto) {
+        Order findOrder = orderRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 주문을 찾을 수 없습니다."));
+        //TODO : 권한확인 필요 (가게 소유자만 가능, 본인 가게만 가능)
+        if (orderRequestDto.getOrderStatus().equals(findOrder.getOrderStatus())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "같은 상태로는 변경할 수 없습니다.");
+        }
+
+        findOrder.patchStatus(orderRequestDto.getOrderStatus());
+        orderRepository.save(findOrder);
+        return new OrderResponseDto(findOrder);
     }
 }

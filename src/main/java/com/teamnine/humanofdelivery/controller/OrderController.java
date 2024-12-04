@@ -6,10 +6,7 @@ import com.teamnine.humanofdelivery.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,5 +18,11 @@ public class OrderController {
     public ResponseEntity<OrderResponseDto> createOrder(@RequestBody OrderRequestDto orderRequestDto) {
         OrderResponseDto order = orderService.create(orderRequestDto);
         return new ResponseEntity<>(order, HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<OrderResponseDto> patchOrderStatus(@PathVariable Long id, @RequestBody OrderRequestDto orderRequestDto) {
+        OrderResponseDto order = orderService.patchOrderStatus(id, orderRequestDto);
+        return new ResponseEntity<>(order, HttpStatus.OK);
     }
 }

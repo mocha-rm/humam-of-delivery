@@ -36,4 +36,8 @@ public class Order extends BaseEntity {
         this.menuName = menuName;
         this.orderStatus = orderStatus;
     }
+
+    public void patchStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+    }
 }
