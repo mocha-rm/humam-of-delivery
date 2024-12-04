@@ -19,13 +19,13 @@ public class Menu extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long menuId;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn lumn(name = "restaurantId", nullable = false);
-//    private Restaurant restaurant;
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn lumn(name = "orderId", nullable = false);
-//    private Order order;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn Column(name = "restaurantId", nullable = false);
+    private Restaurant restaurant;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn Column(name = "orderId", nullable = false);
+    private Order order;
 
     @Column(nullable = false)
     private String menuName;

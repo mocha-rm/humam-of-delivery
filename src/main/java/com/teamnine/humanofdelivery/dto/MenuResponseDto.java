@@ -1,6 +1,7 @@
 package com.teamnine.humanofdelivery.dto;
 
 import com.teamnine.humanofdelivery.entity.base.Menu;
+import com.teamnine.humanofdelivery.status.MenuStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -13,7 +14,7 @@ public class MenuResponseDto {
     private Long menuid;
     private String name;
     private Integer price;
-    private String status;
+    private MenuStatus menuStatus;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
@@ -23,8 +24,6 @@ public class MenuResponseDto {
         this.menuid = menu.getMenuId();
         this.name = menu.getMenuName();
         this.price = menu.getPrice();
-       // this.status = menu.getStatus();
-       // this.createdAt = menu.getCreatedAt();
-       // this.modifiedAt = menu.getModifiedAt();
+        this.menuStatus = menu.getMenuStatus();
     }
 }
