@@ -21,4 +21,13 @@ public class UserResponseDto {
 
     private final LocalDateTime modifiedAt;
 
+    public static UserResponseDto toDto(User user) {
+        return new UserResponseDto(
+                user.getName(),
+                user.getEmail(),
+                user.getRole(),
+                user.getCreatedDate(),
+                user.getModifiedDate()
+        );
+    }
 }
