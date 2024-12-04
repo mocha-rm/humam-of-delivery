@@ -1,5 +1,6 @@
 package com.teamnine.humanofdelivery.dto;
 
+import com.teamnine.humanofdelivery.OrderStatus;
 import com.teamnine.humanofdelivery.entity.Order;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +14,7 @@ public class OrderResponseDto {
     private final Long storeId;
     private final Long userId;
     private final String menuName;
-    private final String status;
+    private final OrderStatus status;
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
 

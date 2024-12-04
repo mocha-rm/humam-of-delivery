@@ -1,5 +1,6 @@
 package com.teamnine.humanofdelivery.service;
 
+import com.teamnine.humanofdelivery.OrderStatus;
 import com.teamnine.humanofdelivery.StoreStatus;
 import com.teamnine.humanofdelivery.dto.OrderRequestDto;
 import com.teamnine.humanofdelivery.dto.OrderResponseDto;
@@ -33,7 +34,7 @@ public class OrderService {
 
         Long userId = 1L; //임시 값
 
-        Order order = new Order(findStore, userId, orderRequestDto.getMenuName(),"ORDER_COMPLETED");
+        Order order = new Order(findStore, userId, orderRequestDto.getMenuName(), OrderStatus.ORDER_COMPLETED);
         orderRepository.save(order);
 
         return new OrderResponseDto(order);

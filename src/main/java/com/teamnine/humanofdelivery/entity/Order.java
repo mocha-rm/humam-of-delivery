@@ -1,5 +1,6 @@
 package com.teamnine.humanofdelivery.entity;
 
+import com.teamnine.humanofdelivery.OrderStatus;
 import com.teamnine.humanofdelivery.entity.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -27,9 +28,9 @@ public class Order extends BaseEntity {
 
     private String menuName;
 
-    private String orderStatus;
+    private OrderStatus orderStatus;
 
-    public Order(Store store, Long userId, String menuName, String orderStatus) {
+    public Order(Store store, Long userId, String menuName, OrderStatus orderStatus) {
         this.store = store;
         this.userId = userId;
         this.menuName = menuName;
