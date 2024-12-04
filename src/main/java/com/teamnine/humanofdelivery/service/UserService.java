@@ -1,6 +1,7 @@
 package com.teamnine.humanofdelivery.service;
 
 import com.teamnine.humanofdelivery.config.Password.PasswordEncoder;
+import com.teamnine.humanofdelivery.config.session.SessionUtils;
 import com.teamnine.humanofdelivery.dto.user.LoginRequestDto;
 import com.teamnine.humanofdelivery.dto.user.SignupRequestDto;
 import com.teamnine.humanofdelivery.dto.user.UserResponseDto;
@@ -26,6 +27,7 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final SessionUtils sessionUtils;
 
     /**
      * @apiNote 회원가입
@@ -87,16 +89,18 @@ public class UserService {
      * @param userId  유저 아이디
      * @return userResponseDto (HttpStatus.OK) / 로그인한 유저와 조회유저가 다른 경우 입력값이 없는 경우 예외 발생
      */
-    // todo 프로필 수정
-    public UserResponseDto updateUserById(Long userId, Map<String, Object> updates
-    ) {
+    public UserResponseDto updateUserById(Long userId, Map<String, Object> updates) {
         User findUser = userRepository.findByIdOrElseThrow(userId);
+        sessionUtils.checkAuthorization(findUser);
         Map<String, Consumer<Object>> updateActions = Map.of(
-                "username", value -> findUser.setName((String) value),
+                "name", value -> findUser.setName((String) value),
                 "email", value -> findUser.setEmail((String) value),
                 "password", value -> findUser.setPassword(passwordEncoder.encode((String) value))
         );
         updates.forEach((key, value) -> {
+            if (value == null) {
+                throw new UserException(UserErrorCode.RESPONSE_INCORRECT);
+            }
             Consumer<Object> action = updateActions.get(key);
             if (action != null) {
                 action.accept(value);
@@ -104,6 +108,7 @@ public class UserService {
                 throw new UserException(UserErrorCode.RESPONSE_INCORRECT);
             }
         });
+        userRepository.save(findUser);
         return UserResponseDto.toDto(findUser);
     }
 
@@ -115,6 +120,7 @@ public class UserService {
      */
     public void deleteUserById(Long userId) {
         User findUser = userRepository.findByIdOrElseThrow(userId);
+        sessionUtils.checkAuthorization(findUser);
 
         // 상태를 DELETED로 변경
         if (findUser.getStatus() != UserStatus.DELETED) {
