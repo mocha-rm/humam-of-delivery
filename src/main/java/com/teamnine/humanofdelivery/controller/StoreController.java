@@ -24,9 +24,15 @@ public class StoreController {
     }
 
     @GetMapping
-    public ResponseEntity<List<StoreResponseDto>> findAllStore(@RequestParam String name) {
+    public ResponseEntity<List<StoreResponseDto>> searchStores(@RequestParam String name) {
         List<StoreResponseDto> stores = storeService.findAll(name);
         return new ResponseEntity<>(stores, HttpStatus.OK);
+    }
+
+    //TODO : 특정 가게 조회 -> 메뉴 목록도 같이 보여질 수 있도록 구현하기
+    @GetMapping("/{id}")
+    public ResponseEntity<?> viewStore(@PathVariable Long id) {
+        return null;
     }
 
     @PatchMapping("/{id}")
