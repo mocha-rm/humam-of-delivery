@@ -1,7 +1,6 @@
 package com.teamnine.humanofdelivery.config.filter;
 
 import com.teamnine.humanofdelivery.common.SessionNames;
-import com.teamnine.humanofdelivery.common.UserNames;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -33,7 +32,7 @@ public class LoginFilter implements Filter {
         if(!isWhiteList(requestURI)) {
             HttpSession session = httpRequest.getSession(false);
 
-            if (session == null || session.getAttribute(UserNames.LOGIN_USER) == null) {
+            if (session == null || session.getAttribute(SessionNames.USER_AUTH) == null) {
                 throw new RuntimeException("로그인 해주세요");
             }
             // 로그인 성공 로직
