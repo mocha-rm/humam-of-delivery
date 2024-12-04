@@ -1,6 +1,6 @@
 package com.teamnine.humanofdelivery.dto.user;
 
-import com.teamnine.humanofdelivery.entity.User;
+import com.teamnine.humanofdelivery.entity.Member;
 import com.teamnine.humanofdelivery.enums.UserRole;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -27,19 +27,19 @@ public class OwnerResponseDto {
 
     private final String storeStatus;
 
-    public static OwnerResponseDto toDto(User user) {
+    public static OwnerResponseDto toDto(Member member) {
         return new OwnerResponseDto(
-                user.getName(),
-                user.getEmail(),
-                user.getRole(),
-                user.getCreatedDate(),
-                user.getModifiedDate(),
+                member.getName(),
+                member.getEmail(),
+                member.getRole(),
+                member.getCreatedDate(),
+                member.getModifiedDate(),
                 null,
                 null,
                 null
         );
     }
-//    public static OwnerResponseDto toDto(User user, Store store) {
+//    public static OwnerResponseDto toDto(Member user, Store store) {
 //        return new OwnerResponseDto(
 //                user.getName(),
 //                user.getEmail(),

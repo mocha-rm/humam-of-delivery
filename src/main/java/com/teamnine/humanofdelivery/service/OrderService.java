@@ -23,7 +23,7 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final StoreRepository storeRepository;
-    //TODO : UserRepository userRepository;
+    //TODO : MemberRepository userRepository;
 
 
     @Transactional

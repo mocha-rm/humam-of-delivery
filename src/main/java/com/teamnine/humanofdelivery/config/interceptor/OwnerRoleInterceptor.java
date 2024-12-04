@@ -1,7 +1,7 @@
 package com.teamnine.humanofdelivery.config.interceptor;
 
 import com.teamnine.humanofdelivery.common.SessionNames;
-import com.teamnine.humanofdelivery.entity.User;
+import com.teamnine.humanofdelivery.entity.Member;
 import com.teamnine.humanofdelivery.enums.UserRole;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -36,8 +36,8 @@ public class OwnerRoleInterceptor implements HandlerInterceptor {
             throw new AccessDeniedException("세션이 없습니다.");
         }
 
-        User user = (User) session.getAttribute(SessionNames.USER_AUTH);
-        UserRole role = user.getRole();
+        Member member = (Member) session.getAttribute(SessionNames.USER_AUTH);
+        UserRole role = member.getRole();
 
         if (role != UserRole.OWNER) {
             throw new SecurityException("OWNER 권한이 필요합니다.");

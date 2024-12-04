@@ -1,6 +1,6 @@
 package com.teamnine.humanofdelivery.dto.user;
 
-import com.teamnine.humanofdelivery.entity.User;
+import com.teamnine.humanofdelivery.entity.Member;
 import com.teamnine.humanofdelivery.enums.UserRole;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @RequiredArgsConstructor
-public class UserResponseDto {
+public class MemberResponseDto {
 
     private final String name;
 
@@ -21,13 +21,13 @@ public class UserResponseDto {
 
     private final LocalDateTime modifiedAt;
 
-    public static UserResponseDto toDto(User user) {
-        return new UserResponseDto(
-                user.getName(),
-                user.getEmail(),
-                user.getRole(),
-                user.getCreatedDate(),
-                user.getModifiedDate()
+    public static MemberResponseDto toDto(Member member) {
+        return new MemberResponseDto(
+                member.getName(),
+                member.getEmail(),
+                member.getRole(),
+                member.getCreatedDate(),
+                member.getModifiedDate()
         );
     }
 }

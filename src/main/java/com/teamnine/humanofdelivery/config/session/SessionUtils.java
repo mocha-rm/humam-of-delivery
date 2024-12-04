@@ -1,7 +1,7 @@
 package com.teamnine.humanofdelivery.config.session;
 
 import com.teamnine.humanofdelivery.common.SessionNames;
-import com.teamnine.humanofdelivery.entity.User;
+import com.teamnine.humanofdelivery.entity.Member;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,7 +33,7 @@ public class SessionUtils {
     }
 
     // 리소스 소유자와 현재 로그인 사용자 비교하여 권한 확인
-    public void checkAuthorization(User resourceOwner) {
+    public void checkAuthorization(Member resourceOwner) {
         String loginEmail = getLoginUserEmail(); // 현재 로그인된 사용자 이메일
         String ownerEmail = resourceOwner.getEmail(); // 리소스 소유자의 이메일
 
