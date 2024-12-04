@@ -11,6 +11,7 @@ import java.time.LocalTime;
 
 @Getter
 @Entity
+@Table(name = "stores")
 @NoArgsConstructor
 public class Store extends BaseEntity {
     @Id
@@ -31,6 +32,9 @@ public class Store extends BaseEntity {
 
     @Column(nullable = false)
     private LocalTime closeAt;
+
+    //TODO : 유저식별자
+
 
 
     @Builder
