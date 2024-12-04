@@ -25,7 +25,7 @@ public class OrderResponseDto {
         this.menuName = order.getMenuName();
         this.status = order.getOrderStatus();
         this.createdAt = order.getCreatedDate();
-        this.modifiedAt = order.getModDate();
+        this.modifiedAt = order.getModifiedDate();
     }
 
     public static OrderResponseDto toDto(Order order) {
@@ -36,7 +36,7 @@ public class OrderResponseDto {
                 order.getMenuName(),
                 order.getOrderStatus(),
                 order.getCreatedDate(),
-                order.getModDate()
+                order.getModifiedDate()
         );
     }
 }
