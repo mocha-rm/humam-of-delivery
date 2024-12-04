@@ -1,6 +1,7 @@
-package com.teamnine.humanofdelivery.entity.base;
+package com.teamnine.humanofdelivery.entity;
 
 
+import com.teamnine.humanofdelivery.entity.base.BaseEntity;
 import com.teamnine.humanofdelivery.status.MenuStatus;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -20,11 +21,11 @@ public class Menu extends BaseEntity {
     private Long menuId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn Column(name = "restaurantId", nullable = false);
-    private Restaurant restaurant;
+    @JoinColumn (name = "store_id", nullable = false)
+    private Store store;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn Column(name = "orderId", nullable = false);
+    @JoinColumn (name = "order_id", nullable = false)
     private Order order;
 
     @Column(nullable = false)
