@@ -21,8 +21,6 @@ public class OwnerResponseDto {
 
     private final LocalDateTime modifiedAt;
 
-    private final Long numRestaurants;
-
     private final String storeId;
 
     private final String storeName;
@@ -36,7 +34,6 @@ public class OwnerResponseDto {
                 user.getRole(),
                 user.getCreatedDate(),
                 user.getModifiedDate(),
-                user.getNumRestaurants(),
                 null,
                 null,
                 null
