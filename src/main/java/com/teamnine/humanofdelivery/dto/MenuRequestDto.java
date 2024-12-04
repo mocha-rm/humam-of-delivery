@@ -1,7 +1,8 @@
 package com.teamnine.humanofdelivery.dto;
 
 
-import com.teamnine.humanofdelivery.entity.base.Menu;
+import com.teamnine.humanofdelivery.entity.Menu;
+import com.teamnine.humanofdelivery.entity.Store;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
@@ -20,6 +21,7 @@ public class MenuRequestDto {
     @NotNull
     @Positive
     private Integer price;
+
 
     public Menu toEntity() {
         return Menu.builder()
