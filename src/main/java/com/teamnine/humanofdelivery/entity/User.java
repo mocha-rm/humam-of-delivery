@@ -39,4 +39,14 @@ public class User extends BaseEntity {
 
     private Long numRestaurants;
 
+
+    public User(String name, String email,UserRole role, Long numRestaurants) {
+        this.name = name;
+        this.email = email;
+        this.role = role;
+        this.numRestaurants = numRestaurants;
+    }
+
+    public User() {
+    }
 }
