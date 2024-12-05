@@ -7,7 +7,7 @@ import com.teamnine.humanofdelivery.dto.StoreResponseDto;
 import com.teamnine.humanofdelivery.dto.StoreWithMenusResponseDto;
 import com.teamnine.humanofdelivery.entity.Member;
 import com.teamnine.humanofdelivery.entity.Store;
-import com.teamnine.humanofdelivery.entity.base.Menu;
+import com.teamnine.humanofdelivery.entity.Menu;
 import com.teamnine.humanofdelivery.enums.UserRole;
 import com.teamnine.humanofdelivery.repository.MemberRepository;
 import com.teamnine.humanofdelivery.repository.MenuRepository;
