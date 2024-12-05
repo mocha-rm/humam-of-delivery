@@ -3,6 +3,7 @@ package com.teamnine.humanofdelivery.service;
 import com.teamnine.humanofdelivery.config.Password.PasswordEncoder;
 import com.teamnine.humanofdelivery.config.session.SessionUtils;
 import com.teamnine.humanofdelivery.dto.user.LoginRequestDto;
+import com.teamnine.humanofdelivery.dto.user.MemberUpdateRequestDto;
 import com.teamnine.humanofdelivery.dto.user.OwnerResponseDto;
 import com.teamnine.humanofdelivery.dto.user.UserResponseDto;
 import com.teamnine.humanofdelivery.dto.user.SignupRequestDto;
@@ -16,6 +17,7 @@ import com.teamnine.humanofdelivery.repository.MemberRepository;
 import com.teamnine.humanofdelivery.repository.StoreRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -97,10 +99,10 @@ public class MemberService {
     public Object findUserById(Long userId) {
         Member member = memberRepository.findByIdOrElseThrow(userId);
 
-        if(UserRole.USER.equals(member.getRole())) {
+        if (UserRole.USER.equals(member.getRole())) {
             return UserResponseDto.toDto(member);
         }
-        if(UserRole.OWNER.equals(member.getRole())) {
+        if (UserRole.OWNER.equals(member.getRole())) {
             long activeStoreCount = storeRepository.countActiveStoresByOwnerId(member.getUserId());
             List<Store> storeList = storeRepository.findAllByOwnerId(member.getUserId());
             List<OwnerResponseDto.StoreDetail> storeDetails = storeList.stream()
@@ -134,22 +136,25 @@ public class MemberService {
      * @throws UserException 입력값이 잘못되었거나 권한이 없을 경우 예외 발생
      * @apiNote 수정 가능한 키(name, email, password)만 허용됩니다.
      */
-    public UserResponseDto updateUserById(Long userId, Map<String, Object> updates, HttpServletRequest request) {
+    public UserResponseDto updateUserById(Long userId, MemberUpdateRequestDto dto, HttpServletRequest request) {
         Member findMember = memberRepository.findByIdOrElseThrow(userId);
         sessionUtils.checkAuthorization(findMember);
 
-        updates.forEach((key, value) -> {
-            if (value == null) {
-                throw new UserException(UserErrorCode.RESPONSE_INCORRECT);
-            }
+        checkPassword(dto.getPassword(), findMember);
 
-            switch (key) {
-                case "name" -> findMember.setName((String) value);
-                case "email" -> findMember.setEmail((String) value);
-                case "password" -> findMember.setPassword(passwordEncoder.encode((String) value));
-                default -> throw new UserException(UserErrorCode.RESPONSE_INCORRECT);
-            }
-        });
+        findMember.setName(dto.getName());
+        findMember.setEmail(dto.getEmail());
+
+        if (dto.getName() != null && !dto.getName().isBlank()) {
+            findMember.setName(dto.getName());
+        }
+        if (dto.getEmail() != null && !dto.getEmail().isBlank()) {
+            findMember.setEmail(dto.getEmail());
+        }
+        if (dto.getNewPassword() != null && !dto.getNewPassword().isBlank()) {
+            findMember.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+        }
+
         memberRepository.save(findMember);
         return UserResponseDto.toDto(findMember);
     }
@@ -161,28 +166,34 @@ public class MemberService {
      * @throws UserException 이미 탈퇴한 회원이거나 권한이 없을 경우 예외 발생
      * @apiNote 회원 탈퇴 시 상태를 "DELETED"로 변경합니다.
      */
-    // todo 리뷰 및 주문 기능과 연계하여 탈퇴 시 이름 수정 필요
-    public void deleteUserById(Long userId) {
+    public void deleteUserById(Long userId, String password) {
         Member findMember = memberRepository.findByIdOrElseThrow(userId);
         sessionUtils.checkAuthorization(findMember);
+
+        checkPassword(password, findMember);
 
         if (findMember.getStatus() != UserStatus.DELETED) {
             findMember.setStatus(UserStatus.DELETED);
 
-//            // 회원이 작성한 리뷰와 주문을 "탈퇴한 회원"으로 업데이트
-//            findMember.getReviews().forEach(review -> {
-//                review.setAuthorName("탈퇴한 회원");
-//                review.setMember(null);
-//            });
-//
-//            findMember.getOrders().forEach(order -> {
-//                order.setOrderedBy("탈퇴한 회원");
-//                order.setMember(null);
-//            });
+            findMember.setName("회원탈퇴한 사용자");
+            findMember.setPassword("deleted_password");
 
             memberRepository.save(findMember);
         } else {
             throw new UserException(UserErrorCode.USER_DEACTIVATED);
+        }
+    }
+
+    /**
+     * 패스워드 일치 여부를 확인합니다.
+     *
+     * @param password 입력 패스워드
+     * @param findUser 저장된 패스워드를 가져오기
+     * @throws UserException 패스워드가 일치 하지 않을 경우 예외 발생
+     */
+    private void checkPassword(String password, Member findUser) {
+        if (!passwordEncoder.matches(password, findUser.getPassword())) {
+            throw new UserException(UserErrorCode.PASSWORD_INCORRECT);
         }
     }
 }
