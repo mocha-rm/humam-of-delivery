@@ -1,11 +1,14 @@
 package com.teamnine.humanofdelivery.dto.user;
 
+import com.teamnine.humanofdelivery.StoreStatus;
 import com.teamnine.humanofdelivery.entity.Member;
+import com.teamnine.humanofdelivery.entity.Store;
 import com.teamnine.humanofdelivery.enums.UserRole;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @RequiredArgsConstructor
@@ -21,35 +24,15 @@ public class OwnerResponseDto {
 
     private final LocalDateTime modifiedAt;
 
-    private final String storeId;
+    private final Long storeNum;
 
-    private final String storeName;
+    private final List<StoreDetail> stores;
 
-    private final String storeStatus;
-
-    public static OwnerResponseDto toDto(Member member) {
-        return new OwnerResponseDto(
-                member.getName(),
-                member.getEmail(),
-                member.getRole(),
-                member.getCreatedDate(),
-                member.getModifiedDate(),
-                null,
-                null,
-                null
-        );
+    @Getter
+    @RequiredArgsConstructor
+    public static class StoreDetail {
+        private final Long storeId;
+        private final String storeName;
+        private final StoreStatus storeStatus;
     }
-//    public static OwnerResponseDto toDto(Member user, Store store) {
-//        return new OwnerResponseDto(
-//                user.getName(),
-//                user.getEmail(),
-//                user.getRole(),
-//                user.getCreatedDate(),
-//                user.getModifiedDate(),
-//                user.getNumRestaurants(),
-//                store.getStoreId(),
-//                store.getStoreName(),
-//                store.getStoreStatus()
-//        );
-//    }
 }
