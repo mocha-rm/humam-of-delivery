@@ -13,4 +13,5 @@ import java.util.List;
 public interface StoreRepository extends JpaRepository<Store, Long> {
     @Query("select s from Store s where s.name like %:name% and s.status <> :status")
     List<Store> findAllByStoreName(@Param("name") String name, @Param("status")StoreStatus storeStatus);
+    Store findByUser_IdAndStore_Id(Long userId, Long storeId);
 }

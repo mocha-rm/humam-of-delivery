@@ -40,9 +40,9 @@ public class Menu extends BaseEntity {
 
 
     @Builder
-    public Menu(Long menuId, Restaurant rstaurant, String menuName, Integer price, MenuStatus menuStatus) {
+    public Menu(Long menuId, Store store, String menuName, Integer price, MenuStatus menuStatus) {
         this.menuStatus = menuStatus;
-        this.restaurant = restaurant;
+        this.store = store;
         this.price = price;
         this.menuName = menuName;
         this.menuId = menuId;
