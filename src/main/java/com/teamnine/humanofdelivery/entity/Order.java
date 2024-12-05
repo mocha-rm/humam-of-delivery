@@ -22,7 +22,7 @@ public class Order extends BaseEntity {
 //TODO : 유저 브랜치 병합 후 구현 예정
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "user_id")
-//    private User user;
+//    private Member user;
 
     private Long userId;
 

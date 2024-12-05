@@ -28,7 +28,7 @@ public class StoreResponseDto {
         this.openAt = store.getOpenAt();
         this.closeAt = store.getCloseAt();
         this.createdAt = store.getCreatedDate();
-        this.modifiedAt = store.getModDate();
+        this.modifiedAt = store.getModifiedDate();
     }
 
     public static StoreResponseDto toDto(Store store) {
@@ -40,6 +40,6 @@ public class StoreResponseDto {
                 store.getOpenAt(),
                 store.getCloseAt(),
                 store.getCreatedDate(),
-                store.getModDate());
+                store.getModifiedDate());
     }
 }
