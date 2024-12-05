@@ -1,10 +1,14 @@
 package com.teamnine.humanofdelivery.service;
 
 import com.teamnine.humanofdelivery.OrderStatus;
+import com.teamnine.humanofdelivery.config.session.SessionUtils;
 import com.teamnine.humanofdelivery.dto.OrderRequestDto;
 import com.teamnine.humanofdelivery.dto.OrderResponseDto;
+import com.teamnine.humanofdelivery.entity.Member;
 import com.teamnine.humanofdelivery.entity.Order;
 import com.teamnine.humanofdelivery.entity.Store;
+import com.teamnine.humanofdelivery.enums.UserRole;
+import com.teamnine.humanofdelivery.repository.MemberRepository;
 import com.teamnine.humanofdelivery.repository.OrderRepository;
 import com.teamnine.humanofdelivery.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,16 +27,23 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final StoreRepository storeRepository;
-    //TODO : MemberRepository userRepository;
+    private final MemberRepository memberRepository;
+    private final SessionUtils sessionUtils;
 
 
     @Transactional
     public OrderResponseDto create(OrderRequestDto orderRequestDto) {
+        Member findMember = memberRepository.findByEmailOrElseThrow(sessionUtils.getLoginUserEmail());
+        if (findMember.getRole().equals(UserRole.OWNER)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "주문은 일반 사용자 계정을 이용해주세요.");
+        }
+
         Store findStore = storeRepository.findById(orderRequestDto.getStoreId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 가게를 찾을 수 없습니다."));
-        //TODO : 최소 주문 금액을 만족하는지?
         if (LocalTime.now().isBefore(findStore.getOpenAt()) || LocalTime.now().isAfter(findStore.getCloseAt())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "영업시간이 아닙니다.");
         }
+        //TODO : 최소 주문 금액을 만족하는지?
+        //TODO : 해당 메뉴가 존재 하는지?
 
         Long userId = 1L; //임시 값
 
