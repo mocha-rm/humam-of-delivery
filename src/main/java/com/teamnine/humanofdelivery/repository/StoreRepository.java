@@ -18,7 +18,8 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
     @Query("select count(s) from Store s where s.status = :status and s.member.userId = :userId")
     int findOpenStore(@Param("status") StoreStatus storeStatus, @Param("userId") Long userId);
 
-    Optional<Store> findByMember_IdAndStore_Id(Long userId, Long storeId);
+    @Query("SELECT s FROM Store s WHERE s.member.userId = :memberId AND s.id = :storeId")
+    Optional<Store> findByMember_IdAndStore_Id(@Param("memberId") Long memberId, @Param("storeId") Long storeId);
 
     // 사장의 store 조회
     @Query("select s from Store s where s.member.userId = :ownerId")
