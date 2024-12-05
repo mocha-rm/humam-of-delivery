@@ -4,10 +4,13 @@ import com.teamnine.humanofdelivery.StoreStatus;
 import com.teamnine.humanofdelivery.config.session.SessionUtils;
 import com.teamnine.humanofdelivery.dto.StoreRequestDto;
 import com.teamnine.humanofdelivery.dto.StoreResponseDto;
+import com.teamnine.humanofdelivery.dto.StoreWithMenusResponseDto;
 import com.teamnine.humanofdelivery.entity.Member;
 import com.teamnine.humanofdelivery.entity.Store;
+import com.teamnine.humanofdelivery.entity.base.Menu;
 import com.teamnine.humanofdelivery.enums.UserRole;
 import com.teamnine.humanofdelivery.repository.MemberRepository;
+import com.teamnine.humanofdelivery.repository.MenuRepository;
 import com.teamnine.humanofdelivery.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,12 +20,14 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class StoreService {
     private final MemberRepository memberRepository;
     private final StoreRepository storeRepository;
+    private final MenuRepository menuRepository;
     private final SessionUtils sessionUtils;
 
     @Transactional
@@ -44,6 +49,13 @@ public class StoreService {
 
     public List<StoreResponseDto> findAll(String name) {
         return storeRepository.findAllByStoreName(name, StoreStatus.SHUT).stream().map(StoreResponseDto::toDto).toList();
+    }
+
+    public StoreWithMenusResponseDto findStore(Long id) {
+        Store findStore = storeRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        List<Menu> activeMenus = menuRepository.findActiveMenusByStoreId(findStore.getId());
+
+        return new StoreWithMenusResponseDto(findStore, activeMenus);
     }
 
     @Transactional
