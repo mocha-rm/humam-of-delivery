@@ -18,10 +18,15 @@ public class Store extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
+
     @Column(nullable = false, length = 20)
     private String name;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private StoreStatus status;
 
     @Column(nullable = false, name = "price_atleast")
@@ -33,13 +38,11 @@ public class Store extends BaseEntity {
     @Column(nullable = false)
     private LocalTime closeAt;
 
-    //TODO : 유저식별자
-
-
 
     @Builder
-    public Store(String name, StoreStatus storeStatus, Integer minCost, LocalTime openAt, LocalTime closeAt) {
+    public Store(String name, Member member, StoreStatus storeStatus, Integer minCost, LocalTime openAt, LocalTime closeAt) {
         this.name = name;
+        this.member = member;
         this.status = storeStatus;
         this.minCost = minCost;
         this.openAt = openAt;

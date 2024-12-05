@@ -1,6 +1,7 @@
 package com.teamnine.humanofdelivery.dto;
 
 import com.teamnine.humanofdelivery.StoreStatus;
+import com.teamnine.humanofdelivery.entity.Member;
 import com.teamnine.humanofdelivery.entity.Store;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +18,10 @@ public class StoreRequestDto {
     private final LocalTime openAt;
     private final LocalTime closeAt;
 
-    public Store toEntity() {
+    public Store toEntity(Member member) {
         return Store.builder()
                 .name(name)
+                .member(member)
                 .storeStatus(status)
                 .minCost(minCost)
                 .openAt(openAt)

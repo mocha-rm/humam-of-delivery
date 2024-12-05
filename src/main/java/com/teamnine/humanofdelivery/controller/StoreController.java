@@ -18,7 +18,6 @@ public class StoreController {
 
     @PostMapping
     public ResponseEntity<StoreResponseDto> createStore(@RequestBody StoreRequestDto storeRequestDto) {
-        //TODO : 권한 확인 로직, 폐업 상태가 아닌 가게를 최대 3개까지만 생성가능
         StoreResponseDto createdStore = storeService.create(storeRequestDto);
         return new ResponseEntity<>(createdStore, HttpStatus.CREATED);
     }

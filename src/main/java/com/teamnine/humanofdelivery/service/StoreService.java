@@ -1,9 +1,13 @@
 package com.teamnine.humanofdelivery.service;
 
 import com.teamnine.humanofdelivery.StoreStatus;
+import com.teamnine.humanofdelivery.config.session.SessionUtils;
 import com.teamnine.humanofdelivery.dto.StoreRequestDto;
 import com.teamnine.humanofdelivery.dto.StoreResponseDto;
+import com.teamnine.humanofdelivery.entity.Member;
 import com.teamnine.humanofdelivery.entity.Store;
+import com.teamnine.humanofdelivery.enums.UserRole;
+import com.teamnine.humanofdelivery.repository.MemberRepository;
 import com.teamnine.humanofdelivery.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,11 +20,25 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class StoreService {
+    private final MemberRepository memberRepository;
     private final StoreRepository storeRepository;
+    private final SessionUtils sessionUtils;
 
     @Transactional
     public StoreResponseDto create(StoreRequestDto storeRequestDto) {
-        Store createdStore = storeRequestDto.toEntity();
+        //권한 체크
+        Member findMember = memberRepository.findByEmailOrElseThrow(sessionUtils.getLoginUserEmail());
+        sessionUtils.checkAuthorization(findMember);
+
+        if (findMember.getRole() != UserRole.OWNER) {
+            //일반 사용자는 가게를 오픈할 수 없습니다.
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        } else if (storeRepository.findOpenStore(StoreStatus.OPEN) >= 3) {
+            //폐업 상태가 아닌 가게를 3개까지 운영가능
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+
+        Store createdStore = storeRequestDto.toEntity(findMember);
         storeRepository.save(createdStore);
         return new StoreResponseDto(createdStore);
     }
