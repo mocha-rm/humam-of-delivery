@@ -26,8 +26,11 @@ public class Order extends BaseEntity {
 
     private Long userId;
 
+    @Column(nullable = false)
     private String menuName;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private OrderStatus orderStatus;
 
     public Order(Store store, Long userId, String menuName, OrderStatus orderStatus) {
