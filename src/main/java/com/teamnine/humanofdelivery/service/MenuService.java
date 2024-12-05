@@ -2,17 +2,15 @@ package com.teamnine.humanofdelivery.service;
 
 import com.teamnine.humanofdelivery.dto.MenuRequestDto;
 import com.teamnine.humanofdelivery.dto.MenuResponseDto;
-import com.teamnine.humanofdelivery.entity.Restaurant;
 import com.teamnine.humanofdelivery.entity.Store;
 import com.teamnine.humanofdelivery.entity.Menu;
+import com.teamnine.humanofdelivery.repository.MemberRepository;
 import com.teamnine.humanofdelivery.repository.MenuRepository;
-import com.teamnine.humanofdelivery.repository.RestaurantRepository;
 import com.teamnine.humanofdelivery.repository.StoreRepository;
-import com.teamnine.humanofdelivery.repository.UserRepository;
 import com.teamnine.humanofdelivery.status.MenuStatus;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,20 +21,21 @@ public class MenuService {
 
     private final MenuRepository menuRepository;
     private final StoreRepository storeRepository;
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
 
     /**
      * 메뉴 생성
      */
-    public MenuResponseDto createMenu(MenuRequestDto requestDto, HttpStatus session) {
+    public MenuResponseDto createMenu(MenuRequestDto requestDto, HttpSession session) {
         // 세션에서 로그인 사용자 확인
         Long userId = (Long) session.getAttribute("userId");
         if (userId == null) {
             throw new IllegalStateException("로그인이 필요합니다.");
         }
 
+
         // Store 엔티티 조회 (User가 소유한 Store)
-        Store store = storeRepository.findByUser_IdAndStore_Id(userId, store.getId());
+        Store store = storeRepository.findByUser_IdAndStore_Id(userId, requestDto.getStoreId())
                 .orElseThrow(() -> new EntityNotFoundException("해당 가게를 찾을 수 없습니다."));
 
         // Menu 객체 생성
@@ -54,7 +53,8 @@ public class MenuService {
         return new MenuResponseDto(savedMenu);
     }
 
-    public MenuResponseDto updateMenu(Long menuId, MenuRequestDto requestDto) {
+
+    public MenuResponseDto updateMenu(Long menuId, MenuRequestDto requestDto, HttpSession session) {
 
         // 세션에서 로그인 사용자 확인
         Long storeId = (Long) session.getAttribute("storeId");
@@ -74,7 +74,7 @@ public class MenuService {
     /**
      * 메뉴 삭제 (status 변경)
      */
-    public String deleteMenu(Long menuId) {
+    public String deleteMenu(Long menuId, HttpSession session) {
 
         // 세션에서 로그인 사용자 확인
         Long storeId = (Long) session.getAttribute("storeId");

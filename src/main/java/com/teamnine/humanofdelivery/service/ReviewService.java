@@ -3,14 +3,14 @@ package com.teamnine.humanofdelivery.service;
 import com.teamnine.humanofdelivery.OrderStatus;
 import com.teamnine.humanofdelivery.dto.ReviewRequestDto;
 import com.teamnine.humanofdelivery.dto.ReviewResponseDto;
+import com.teamnine.humanofdelivery.entity.Member;
 import com.teamnine.humanofdelivery.entity.Order;
 import com.teamnine.humanofdelivery.entity.Review;
 import com.teamnine.humanofdelivery.entity.Store;
-import com.teamnine.humanofdelivery.entity.User;
+import com.teamnine.humanofdelivery.repository.MemberRepository;
 import com.teamnine.humanofdelivery.repository.OrderRepository;
 import com.teamnine.humanofdelivery.repository.ReviewRepository;
 import com.teamnine.humanofdelivery.repository.StoreRepository;
-import com.teamnine.humanofdelivery.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final OrderRepository orderRepository;
     private final StoreRepository storeRepository;
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
 
     public ReviewResponseDto createReview( Long userId, ReviewRequestDto reviewRequestDto) {
             Order order = orderRepository.findById(reviewRequestDto.getOrderId()).orElseThrow(()->new EntityNotFoundException("주문을 찾을 수 없습니다"));
@@ -41,11 +41,11 @@ public class ReviewService {
             }
 
             Store store = order.getStore();
-            User user = userRepository.findById(userId).orElseThrow(()->new EntityNotFoundException(("해당 사용자를 찾을 수 없습니다")));
+            Member member = memberRepository.findById(userId).orElseThrow(()->new EntityNotFoundException(("해당 사용자를 찾을 수 없습니다")));
 
         Review review = Review.builder()
                 .store(store)
-                .user(user)
+                .member(member)
                 .order(order)
                 .content(reviewRequestDto.getContent())
                 .rate(reviewRequestDto.getRate())
@@ -54,9 +54,19 @@ public class ReviewService {
         return new ReviewResponseDto(reviewRepository.save(review));
     }
 
-    public List<ReviewResponseDto> getStoreReviews(Long storeId, int minRate, int maxRate) {
-        List<Review> reviews = reviewRepository.findAllByStore_StoreIdAndRateBetweenOrderByCreatedAtDesc(storeId, minRate, maxRate);
+    public List<ReviewResponseDto> getStoreReviews(Long storeId, Integer minRate, Integer maxRate) {
+        List<Review> reviews;
+
+        if (minRate != null && maxRate != null) {
+            // 별점 범위가 지정된 경우
+            reviews = reviewRepository.findAllByStore_StoreIdAndRateBetweenOrderByCreatedAtDesc(storeId, minRate, maxRate);
+        } else {
+            // 별점 범위가 없는 경우 모든 리뷰 조회
+            reviews = reviewRepository.findAllByStore_StoreIdOrderByCreatedAtDesc(storeId);
+        }
+
         return reviews.stream().map(ReviewResponseDto::new).collect(Collectors.toList());
+
     }
 
     public ReviewResponseDto updateReview(Long reviewId, String content, int rate) {

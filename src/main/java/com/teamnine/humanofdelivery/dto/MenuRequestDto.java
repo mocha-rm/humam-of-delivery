@@ -19,6 +19,9 @@ public class MenuRequestDto {
     private String menuName;
 
     @NotNull
+    private Long storeId;
+
+    @NotNull
     @Positive
     private Integer price;
 

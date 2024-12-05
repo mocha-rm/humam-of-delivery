@@ -22,7 +22,7 @@ public class Review extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="user_id", nullable =false)
-    private User user;
+    private Member member;
 
     @OneToOne(fetch = FetchType.LAZY)//One to One으로 수정
     @JoinColumn (name ="order_id", nullable =false)
@@ -35,10 +35,10 @@ public class Review extends BaseEntity {
     private int rate;
 
     @Builder
-    public Review(Long ReviewId, Store store,User user, Order order, String content, int rate) {
+    public Review(Long ReviewId, Store store,Member member, Order order, String content, int rate) {
         this.id = ReviewId;
         this.store = store;
-        this.user = user;
+        this.member = member;
         this.order = order;
         this.content = content;
         this.rate = rate;

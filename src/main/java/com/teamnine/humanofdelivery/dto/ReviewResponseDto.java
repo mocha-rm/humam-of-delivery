@@ -25,7 +25,7 @@ public class ReviewResponseDto {
         this.content = review.getContent();
         this.rate = review.getRate();
         this.storeId = review.getStore().getId();
-        this.userId= review.getUser().getUserId();
+        this.userId= review.getMember().getUserId();
         this.orderId = review.getOrder().getId();
         this.createdAt= review.getCreatedDate();
         this.modifiedAt= review.getModifiedDate();
