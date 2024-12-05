@@ -21,6 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
+/**
+ * 회원 관리와 관련된 REST API를 제공하는 컨트롤러 클래스.
+ * @author 이빛나
+ */
 @RestController
 @RequestMapping("/members")
 @RequiredArgsConstructor
@@ -28,7 +32,12 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    // todo 회원가입
+    /**
+     * 회원가입 요청을 처리합니다.
+     *
+     * @param dto 회원가입 요청 데이터
+     * @return 생성된 회원 정보
+     */
     @PostMapping("/signup")
     public ResponseEntity<UserResponseDto> createUser(
             @Valid
@@ -37,7 +46,13 @@ public class MemberController {
         return ResponseEntity.ok().body(memberService.signUp(dto));
     }
 
-    // todo 로그인
+    /**
+     * 로그인 요청을 처리합니다.
+     *
+     * @param dto     로그인 요청 데이터
+     * @param request HTTP 요청 객체
+     * @return 로그인된 회원 정보
+     */
     @PostMapping("/login")
     public ResponseEntity<UserResponseDto> login(
             @Valid
@@ -50,7 +65,12 @@ public class MemberController {
         return ResponseEntity.ok(userResponse);
     }
 
-    // todo 로그아웃
+    /**
+     * 로그아웃 요청을 처리합니다.
+     *
+     * @param request HTTP 요청 객체
+     * @return 로그아웃 완료 메시지
+     */
     @PostMapping("/logout")
     public ResponseEntity<String> logout(
             HttpServletRequest request
@@ -62,7 +82,12 @@ public class MemberController {
         return ResponseEntity.ok("로그아웃 완료");
     }
 
-    // todo 프로필 조회
+    /**
+     * 특정 회원의 프로필 정보를 조회합니다.
+     *
+     * @param id 조회할 회원 ID
+     * @return 회원 프로필 정보
+     */
     @GetMapping("/{id}")
     public ResponseEntity<?> findUser(
             @PathVariable Long id
@@ -70,7 +95,14 @@ public class MemberController {
         return ResponseEntity.ok().body(memberService.findUserById(id));
     }
 
-    // todo 프로필 수정
+    /**
+     * 특정 회원의 프로필 정보를 수정합니다.
+     *
+     * @param id      수정할 회원 ID
+     * @param updates 수정할 데이터
+     * @param request HTTP 요청 객체
+     * @return 수정된 회원 정보
+     */
     @PatchMapping("/{id}")
     public ResponseEntity<UserResponseDto> updateUser(
             @PathVariable Long id,
@@ -80,7 +112,12 @@ public class MemberController {
         return new ResponseEntity<>(memberService.updateUserById(id, updates, request), HttpStatus.OK);
     }
 
-    // todo 회원 탈퇴
+    /**
+     * 특정 회원의 계정을 비활성화합니다.
+     *
+     * @param id 비활성화할 회원 ID
+     * @return 비활성화 완료 메시지
+     */
     @PatchMapping("/{id}/deactivate")
     public ResponseEntity<String> deleteUser(
             @PathVariable Long id) {
