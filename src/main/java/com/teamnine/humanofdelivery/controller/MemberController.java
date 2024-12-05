@@ -3,7 +3,7 @@ package com.teamnine.humanofdelivery.controller;
 import com.teamnine.humanofdelivery.common.SessionNames;
 import com.teamnine.humanofdelivery.dto.user.LoginRequestDto;
 import com.teamnine.humanofdelivery.dto.user.SignupRequestDto;
-import com.teamnine.humanofdelivery.dto.user.MemberResponseDto;
+import com.teamnine.humanofdelivery.dto.user.UserResponseDto;
 import com.teamnine.humanofdelivery.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -30,7 +30,7 @@ public class MemberController {
 
     // todo 회원가입
     @PostMapping("/signup")
-    public ResponseEntity<MemberResponseDto> createUser(
+    public ResponseEntity<UserResponseDto> createUser(
             @Valid
             @RequestBody SignupRequestDto dto
     ) {
@@ -39,12 +39,12 @@ public class MemberController {
 
     // todo 로그인
     @PostMapping("/login")
-    public ResponseEntity<MemberResponseDto> login(
+    public ResponseEntity<UserResponseDto> login(
             @Valid
             @RequestBody LoginRequestDto dto,
             HttpServletRequest request
     ) {
-        MemberResponseDto userResponse = memberService.login(dto);
+        UserResponseDto userResponse = memberService.login(dto);
         HttpSession session = request.getSession(true);
         session.setAttribute(SessionNames.USER_AUTH, dto.getEmail());
         return ResponseEntity.ok(userResponse);
@@ -64,7 +64,7 @@ public class MemberController {
 
     // todo 프로필 조회
     @GetMapping("/{id}")
-    public ResponseEntity<MemberResponseDto> findUser(
+    public ResponseEntity<?> findUser(
             @PathVariable Long id
     ) {
         return ResponseEntity.ok().body(memberService.findUserById(id));
@@ -72,17 +72,18 @@ public class MemberController {
 
     // todo 프로필 수정
     @PatchMapping("/{id}")
-    public ResponseEntity<MemberResponseDto> updateUser(
+    public ResponseEntity<UserResponseDto> updateUser(
             @PathVariable Long id,
             @Valid
             @RequestBody Map<String, Object> updates,
             HttpServletRequest request) {
-        return new ResponseEntity<>(memberService.updateUserById(id, updates), HttpStatus.OK);
+        return new ResponseEntity<>(memberService.updateUserById(id, updates, request), HttpStatus.OK);
     }
 
     // todo 회원 탈퇴
     @PatchMapping("/{id}/deactivate")
-    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<String> deleteUser(
+            @PathVariable Long id) {
         memberService.deleteUserById(id);
         return ResponseEntity.ok().body("정상적으로 삭제되었습니다.");
     }

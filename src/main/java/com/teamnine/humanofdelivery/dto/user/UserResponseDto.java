@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @RequiredArgsConstructor
-public class MemberResponseDto {
+public class UserResponseDto {
 
     private final String name;
 
@@ -21,8 +21,8 @@ public class MemberResponseDto {
 
     private final LocalDateTime modifiedAt;
 
-    public static MemberResponseDto toDto(Member member) {
-        return new MemberResponseDto(
+    public static UserResponseDto toDto(Member member) {
+        return new UserResponseDto(
                 member.getName(),
                 member.getEmail(),
                 member.getRole(),
