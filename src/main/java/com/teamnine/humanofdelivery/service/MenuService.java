@@ -28,14 +28,14 @@ public class MenuService {
      */
     public MenuResponseDto createMenu(MenuRequestDto requestDto, HttpSession session) {
         // 세션에서 로그인 사용자 확인
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) {
+        Long memberId = (Long) session.getAttribute("memberId");
+        if (memberId == null) {
             throw new IllegalStateException("로그인이 필요합니다.");
         }
 
 
-        // Store 엔티티 조회 (User가 소유한 Store)
-        Store store = storeRepository.findByUser_IdAndStore_Id(userId, requestDto.getStoreId())
+        // Store 엔티티 조회 (Member가 소유한 Store)
+        Store store = storeRepository.findByMember_IdAndStore_Id(memberId, requestDto.getStoreId())
                 .orElseThrow(() -> new EntityNotFoundException("해당 가게를 찾을 수 없습니다."));
 
         // Menu 객체 생성
