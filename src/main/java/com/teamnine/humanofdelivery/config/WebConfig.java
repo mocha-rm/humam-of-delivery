@@ -1,8 +1,12 @@
 package com.teamnine.humanofdelivery.config;
 
+import com.teamnine.humanofdelivery.config.filter.LoginFilter;
 import com.teamnine.humanofdelivery.config.interceptor.OwnerRoleInterceptor;
 import com.teamnine.humanofdelivery.config.interceptor.UserRoleInterceptor;
+import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -12,7 +16,19 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
-    // todo path 협의 후 수정 필요
+    /**
+     * 로그인 필터 등록
+     */
+    @Bean
+    public FilterRegistrationBean logoutFilter() {
+        FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
+        filterRegistrationBean.setFilter(new LoginFilter());
+        filterRegistrationBean.setOrder(1);
+        filterRegistrationBean.addUrlPatterns("/*");
+
+        return filterRegistrationBean;
+    }
+
     private static final String[] OWNER_ROLE_REQUIRED_PATH_PATTERNS = {"/owner/*"};
     private static final String[] USER_ROLE_REQUIRED_PATH_PATTERNS = {"/user/*"};
 
