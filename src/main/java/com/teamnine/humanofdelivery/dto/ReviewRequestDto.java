@@ -1,8 +1,10 @@
 package com.teamnine.humanofdelivery.dto;
 
 
-import com.teamnine.humanofdelivery.entity.base.Menu;
-import com.teamnine.humanofdelivery.entity.base.Review;
+
+import com.teamnine.humanofdelivery.entity.Review;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,9 +13,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ReviewRequestDto {
 
+    @NotNull
+    private Long orderId;
+
     private String content;
 
-    @NotNull
+    @Min(1)
+    @Max(5)
     private int rate;
 
     public Review toEntity() {

@@ -1,7 +1,7 @@
-package com.teamnine.humanofdelivery.entity.base;
+package com.teamnine.humanofdelivery.entity;
 
 
-import com.teamnine.humanofdelivery.status.MenuStatus;
+import com.teamnine.humanofdelivery.entity.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,22 +13,20 @@ import lombok.NoArgsConstructor;
 public class Review extends BaseEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
-    Column(name ="restaurantId", nullable =false);
-    private Restaurant restaurant;
+    @JoinColumn(name ="store_id", nullable =false)
+    private Store store;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
-    Column(name ="orderId", nullable =false);
-    private Order order;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn
-    Column(name ="userId", nullable =false);
+    @JoinColumn(name ="user_id", nullable =false)
     private User user;
+
+    @OneToOne(fetch = FetchType.LAZY)//One to One으로 수정
+    @JoinColumn (name ="order_id", nullable =false)
+    private Order order;
 
     @Column
     private String content;
@@ -37,9 +35,10 @@ public class Review extends BaseEntity {
     private int rate;
 
     @Builder
-    public Review(Long ReviewId, Restaurant restaurant, Order order, String content, int rate) {
+    public Review(Long ReviewId, Store store,User user, Order order, String content, int rate) {
         this.id = ReviewId;
-        this.restaurant = restaurant;
+        this.store = store;
+        this.user = user;
         this.order = order;
         this.content = content;
         this.rate = rate;
@@ -51,7 +50,4 @@ public class Review extends BaseEntity {
         this.rate = rate;
     }
 
-    public void deleteMenu(){
-
-    }
 }
