@@ -12,6 +12,7 @@ import com.teamnine.humanofdelivery.repository.OrderRepository;
 import com.teamnine.humanofdelivery.repository.ReviewRepository;
 import com.teamnine.humanofdelivery.repository.StoreRepository;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,19 +30,31 @@ public class ReviewService {
     private final StoreRepository storeRepository;
     private final MemberRepository memberRepository;
 
-    public ReviewResponseDto createReview( Long userId, ReviewRequestDto reviewRequestDto) {
-            Order order = orderRepository.findById(reviewRequestDto.getOrderId()).orElseThrow(()->new EntityNotFoundException("주문을 찾을 수 없습니다"));
+    public ReviewResponseDto createReview(ReviewRequestDto reviewRequestDto, HttpSession session) {
+        // 로그인한 사용자 확인
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            throw new IllegalStateException("로그인이 필요합니다.");
+        }
 
-            if(!order.getOrderStatus().equals(OrderStatus.DELIVERY_COMPLETED)){
+        // 주문 조회
+        Order order = orderRepository.findById(reviewRequestDto.getOrderId()).orElseThrow(()->new EntityNotFoundException("주문을 찾을 수 없습니다"));
+
+        // 로그인한 사용자가 주문의 주인인지 확인
+        if (!order.getUserId().equals(userId)) {
+            throw new IllegalStateException("본인의 주문에 대해서만 리뷰를 작성할 수 있습니다.");
+        }
+
+        if(!order.getOrderStatus().equals(OrderStatus.DELIVERY_COMPLETED)){
                 throw new IllegalStateException("배달 완료된 주문만 리뷰 작성이 가능합니다.");
-            }
+        }
 
-            if(reviewRepository.existsByOrder_OrderId(reviewRequestDto.getOrderId())){
+        if(reviewRepository.existsByOrder_OrderId(reviewRequestDto.getOrderId())){
                 throw new IllegalStateException(("해당 주문에 대한 리뷰는 이미 작성되었습니다."));
-            }
+        }
 
-            Store store = order.getStore();
-            Member member = memberRepository.findById(userId).orElseThrow(()->new EntityNotFoundException(("해당 사용자를 찾을 수 없습니다")));
+        Store store = order.getStore();
+        Member member = memberRepository.findById(userId).orElseThrow(()->new EntityNotFoundException(("해당 사용자를 찾을 수 없습니다")));
 
         Review review = Review.builder()
                 .store(store)
@@ -69,17 +82,43 @@ public class ReviewService {
 
     }
 
-    public ReviewResponseDto updateReview(Long reviewId, String content, int rate) {
+    public ReviewResponseDto updateReview(Long reviewId, String content, int rate, HttpSession session) {
+        // 로그인한 사용자 확인
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            throw new IllegalStateException("로그인이 필요합니다.");
+        }
+        //리뷰 조회
         Review review = reviewRepository.findById(reviewId).orElseThrow(()->new EntityNotFoundException("해당 리뷰를 찾을 수 없습니다"));
+
+        //로그인한 사용자가 리뷰 작성자인지 확인
+        if (!review.getMember().getUserId().equals(userId)) {
+            throw new IllegalStateException("본인의 리뷰만 수정할 수 있습니다.");
+        }
+
+        //리뷰 수정
         review.updateReview(content, rate);
         return new ReviewResponseDto(reviewRepository.save(review));
     }
 
-    public String deleteReview(Long reviewId) {
+    public String deleteReview(Long reviewId, HttpSession session) {
+        // 로그인한 사용자 확인
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            throw new IllegalStateException("로그인이 필요합니다.");
+        }
+
+
+        //리뷰 조회
         Review review = reviewRepository.findById(reviewId).orElseThrow(()->new EntityNotFoundException("해당 리뷰를 찾을 수 없습니다"));
+
+        // 로그인한 사용자가 리뷰 작성자인지 확인
+        if (!review.getMember().getUserId().equals(userId)) {
+            throw new IllegalStateException("본인의 리뷰만 삭제할 수 있습니다.");
+        }
+
         reviewRepository.delete(review);
         return "리뷰가 삭제되었습니다.";
     }
-
 
 }
