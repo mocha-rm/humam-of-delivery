@@ -3,6 +3,8 @@ package com.teamnine.humanofdelivery.config.interceptor;
 import com.teamnine.humanofdelivery.common.SessionNames;
 import com.teamnine.humanofdelivery.entity.Member;
 import com.teamnine.humanofdelivery.enums.UserRole;
+import com.teamnine.humanofdelivery.exception.user.UserErrorCode;
+import com.teamnine.humanofdelivery.exception.user.UserException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -24,8 +26,7 @@ public class OwnerRoleInterceptor implements HandlerInterceptor {
      *  <li>{@code true} - 다음 인터셉터 또는 핸들러를 실행.</li>
      *  <li>{@code false} - 다음 인터셉터를 실행하지 않고 중단.</li>
      * </ul>
-     * @throws AccessDeniedException 인가되지 않았을 경우
-     * @throws SecurityException 권한이 없을 경우
+     * @throws UserException 권한이 없을 경우 예외처리
      */
 
     @Override
@@ -33,14 +34,12 @@ public class OwnerRoleInterceptor implements HandlerInterceptor {
     ) throws Exception {
         HttpSession session = request.getSession(false);
         if (session == null) {
-            throw new AccessDeniedException("세션이 없습니다.");
+            throw new UserException(UserErrorCode.LOGIN_REQUIRED);
         }
 
-        Member member = (Member) session.getAttribute(SessionNames.USER_AUTH);
-        UserRole role = member.getRole();
-
+        UserRole role = (UserRole) session.getAttribute(SessionNames.USER_ROLE);
         if (role != UserRole.OWNER) {
-            throw new SecurityException("OWNER 권한이 필요합니다.");
+            throw new UserException(UserErrorCode.PERMISSION_DENIED);
         }
         return true;
     }

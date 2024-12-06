@@ -17,6 +17,7 @@ public class UserExceptionHandler {
 
         Map<String, String> response = new HashMap<>();
         response.put("error", ex.getMessage());
+        response.put("code", ex.getErrorCode().getCode());
 
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)

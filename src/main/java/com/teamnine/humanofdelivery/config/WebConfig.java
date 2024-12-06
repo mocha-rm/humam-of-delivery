@@ -3,6 +3,7 @@ package com.teamnine.humanofdelivery.config;
 import com.teamnine.humanofdelivery.config.filter.LoginFilter;
 import com.teamnine.humanofdelivery.config.interceptor.OwnerRoleInterceptor;
 import com.teamnine.humanofdelivery.config.interceptor.UserRoleInterceptor;
+import com.teamnine.humanofdelivery.repository.MemberRepository;
 import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -20,14 +21,23 @@ public class WebConfig implements WebMvcConfigurer {
      * 로그인 필터 등록
      */
     @Bean
-    public FilterRegistrationBean logoutFilter() {
+    public FilterRegistrationBean logoutFilter(MemberRepository memberRepository) {
         FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<>();
-        filterRegistrationBean.setFilter(new LoginFilter());
+        filterRegistrationBean.setFilter(new LoginFilter(memberRepository));
         filterRegistrationBean.setOrder(1);
         filterRegistrationBean.addUrlPatterns("/*");
 
         return filterRegistrationBean;
     }
+
+    @Bean
+    public FilterRegistrationBean<LoginFilter> loginFilter(MemberRepository memberRepository) {
+        FilterRegistrationBean<LoginFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new LoginFilter(memberRepository));
+        registrationBean.addUrlPatterns("/*"); // 필요한 URL 패턴 추가
+        return registrationBean;
+    }
+
 
     private static final String[] OWNER_ROLE_REQUIRED_PATH_PATTERNS = {"/owner/*"};
     private static final String[] USER_ROLE_REQUIRED_PATH_PATTERNS = {"/user/*"};

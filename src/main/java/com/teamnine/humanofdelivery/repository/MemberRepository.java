@@ -52,4 +52,12 @@ public interface MemberRepository extends JpaRepository <Member, Long> {
     default Member findByEmailOrElseThrow(String email) {
         return findByEmail(email).orElseThrow(() ->  new UserException(UserErrorCode.EMAIL_NOT_FOUND));
     }
+
+    /**
+     * 이메일 중복여부를 검사합니다.
+     *
+     * @param email 검색할 회원의 이메일
+     * @return 해당 이메일을 가진 회원 엔티티
+     */
+    boolean existsByEmail(String email);
 }
