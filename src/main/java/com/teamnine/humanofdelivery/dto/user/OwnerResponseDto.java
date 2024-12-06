@@ -1,7 +1,7 @@
 package com.teamnine.humanofdelivery.dto.user;
 
+import com.teamnine.humanofdelivery.config.role.MemberRole;
 import com.teamnine.humanofdelivery.status.StoreStatus;
-import com.teamnine.humanofdelivery.enums.UserRole;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +16,7 @@ public class OwnerResponseDto {
 
     private final String email;
 
-    private final UserRole role;
+    private final MemberRole role;
 
     private final LocalDateTime createdAt;
 

@@ -8,7 +8,6 @@ import com.teamnine.humanofdelivery.entity.Member;
 import com.teamnine.humanofdelivery.entity.Menu;
 import com.teamnine.humanofdelivery.entity.Order;
 import com.teamnine.humanofdelivery.entity.Store;
-import com.teamnine.humanofdelivery.enums.UserRole;
 import com.teamnine.humanofdelivery.exception.order.OrderErrorCode;
 import com.teamnine.humanofdelivery.exception.order.OrderException;
 import com.teamnine.humanofdelivery.exception.store.StoreErrorCode;

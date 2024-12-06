@@ -1,4 +1,4 @@
-package com.teamnine.humanofdelivery.config.Password;
+package com.teamnine.humanofdelivery.config.password;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;

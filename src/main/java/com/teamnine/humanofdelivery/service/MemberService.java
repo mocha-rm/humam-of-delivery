@@ -1,6 +1,7 @@
 package com.teamnine.humanofdelivery.service;
 
-import com.teamnine.humanofdelivery.config.Password.PasswordEncoder;
+import com.teamnine.humanofdelivery.config.password.PasswordEncoder;
+import com.teamnine.humanofdelivery.config.role.MemberRole;
 import com.teamnine.humanofdelivery.config.session.SessionUtils;
 import com.teamnine.humanofdelivery.dto.user.LoginRequestDto;
 import com.teamnine.humanofdelivery.dto.user.MemberUpdateRequestDto;
@@ -9,15 +10,13 @@ import com.teamnine.humanofdelivery.dto.user.UserResponseDto;
 import com.teamnine.humanofdelivery.dto.user.SignupRequestDto;
 import com.teamnine.humanofdelivery.entity.Member;
 import com.teamnine.humanofdelivery.entity.Store;
-import com.teamnine.humanofdelivery.enums.UserRole;
-import com.teamnine.humanofdelivery.enums.UserStatus;
+import com.teamnine.humanofdelivery.status.UserStatus;
 import com.teamnine.humanofdelivery.exception.user.UserErrorCode;
 import com.teamnine.humanofdelivery.exception.user.UserException;
 import com.teamnine.humanofdelivery.repository.MemberRepository;
 import com.teamnine.humanofdelivery.repository.StoreRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 회원 관리와 관련된 비즈니스 로직을 제공하는 서비스 클래스.
@@ -102,10 +100,10 @@ public class MemberService {
     public Object findUserById(Long userId) {
         Member member = memberRepository.findByIdOrElseThrow(userId);
 
-        if (UserRole.USER.equals(member.getRole())) {
+        if (MemberRole.USER.equals(member.getRole())) {
             return UserResponseDto.toDto(member);
         }
-        if (UserRole.OWNER.equals(member.getRole())) {
+        if (MemberRole.OWNER.equals(member.getRole())) {
             long activeStoreCount = storeRepository.countActiveStoresByOwnerId(member.getUserId());
             List<Store> storeList = storeRepository.findAllByOwnerId(member.getUserId());
             List<OwnerResponseDto.StoreDetail> storeDetails = storeList.stream()

@@ -1,8 +1,8 @@
 package com.teamnine.humanofdelivery.config.filter;
 
 import com.teamnine.humanofdelivery.common.SessionNames;
+import com.teamnine.humanofdelivery.config.role.MemberRole;
 import com.teamnine.humanofdelivery.entity.Member;
-import com.teamnine.humanofdelivery.enums.UserRole;
 import com.teamnine.humanofdelivery.repository.MemberRepository;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
@@ -46,7 +46,7 @@ public class LoginFilter implements Filter {
             // 로그인 성공 로직
             log.info("로그인에 성공했습니다.");
 
-            // 세션에 UserRole 추가 저장
+            // 세션에 MemberRole 추가 저장
             Object userRole = session.getAttribute(SessionNames.USER_ROLE);
             if (userRole == null) {
                 // 세션에 역할 정보가 없을 경우만 추가 (중복 저장 방지)
@@ -64,7 +64,7 @@ public class LoginFilter implements Filter {
     }
 
     // 사용자 역할 가져오기 메서드
-    private UserRole fetchUserRole(HttpSession session) {
+    private MemberRole fetchUserRole(HttpSession session) {
         // SessionNames.USER_AUTH에서 이메일 또는 ID를 가져옴
         String userEmail = (String) session.getAttribute(SessionNames.USER_AUTH);
 
