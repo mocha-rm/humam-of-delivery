@@ -1,6 +1,6 @@
 package com.teamnine.humanofdelivery.entity;
 
-import com.teamnine.humanofdelivery.OrderStatus;
+import com.teamnine.humanofdelivery.status.OrderStatus;
 import com.teamnine.humanofdelivery.entity.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
