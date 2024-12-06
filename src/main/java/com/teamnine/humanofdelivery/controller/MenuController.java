@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("owner/menus")
+@RequestMapping("/menus")
 public class MenuController {
 
     private final MenuService menuService;
