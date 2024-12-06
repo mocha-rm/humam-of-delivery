@@ -1,6 +1,6 @@
 package com.teamnine.humanofdelivery.repository;
 
-import com.teamnine.humanofdelivery.StoreStatus;
+import com.teamnine.humanofdelivery.status.StoreStatus;
 import com.teamnine.humanofdelivery.entity.Store;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

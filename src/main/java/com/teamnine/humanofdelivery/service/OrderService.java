@@ -1,9 +1,9 @@
 package com.teamnine.humanofdelivery.service;
 
-import com.teamnine.humanofdelivery.OrderStatus;
+import com.teamnine.humanofdelivery.status.OrderStatus;
 import com.teamnine.humanofdelivery.config.session.SessionUtils;
-import com.teamnine.humanofdelivery.dto.OrderRequestDto;
-import com.teamnine.humanofdelivery.dto.OrderResponseDto;
+import com.teamnine.humanofdelivery.dto.order.OrderRequestDto;
+import com.teamnine.humanofdelivery.dto.order.OrderResponseDto;
 import com.teamnine.humanofdelivery.entity.Member;
 import com.teamnine.humanofdelivery.entity.Menu;
 import com.teamnine.humanofdelivery.entity.Order;

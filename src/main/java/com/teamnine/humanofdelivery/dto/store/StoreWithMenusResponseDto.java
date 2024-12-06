@@ -1,6 +1,7 @@
-package com.teamnine.humanofdelivery.dto;
+package com.teamnine.humanofdelivery.dto.store;
 
-import com.teamnine.humanofdelivery.StoreStatus;
+import com.teamnine.humanofdelivery.dto.MenuResponseDto;
+import com.teamnine.humanofdelivery.status.StoreStatus;
 import com.teamnine.humanofdelivery.entity.Store;
 import com.teamnine.humanofdelivery.entity.Menu;
 import lombok.Getter;

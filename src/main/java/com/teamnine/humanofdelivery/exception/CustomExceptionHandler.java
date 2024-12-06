@@ -15,13 +15,25 @@ import java.util.Map;
 public class CustomExceptionHandler {
 
     @ExceptionHandler(UserException.class)
-    public ResponseEntity<Map<String, String>> handleCustomException(UserException ex) {
-        return getMapResponseEntity("error", ex.getMessage(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Map<String, String>> handleUserException(UserException ex) {
+
+        Map<String, String> response = new HashMap<>();
+        response.put("error", ex.getMessage());
+        response.put("code", ex.getErrorCode().getCode());
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(response);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, String>> handleIllegalArgumentException(IllegalArgumentException ex) {
-        return getMapResponseEntity("error", ex.getMessage(), HttpStatus.BAD_REQUEST);
+        Map<String, String> response = new HashMap<>();
+        response.put("error", ex.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(response);
     }
 
     @ExceptionHandler(StoreException.class)

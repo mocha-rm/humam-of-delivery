@@ -1,6 +1,6 @@
 package com.teamnine.humanofdelivery.entity;
 
-import com.teamnine.humanofdelivery.StoreStatus;
+import com.teamnine.humanofdelivery.status.StoreStatus;
 import com.teamnine.humanofdelivery.entity.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Builder;

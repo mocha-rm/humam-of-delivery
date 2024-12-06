@@ -1,7 +1,7 @@
 package com.teamnine.humanofdelivery.controller;
 
-import com.teamnine.humanofdelivery.dto.OrderRequestDto;
-import com.teamnine.humanofdelivery.dto.OrderResponseDto;
+import com.teamnine.humanofdelivery.dto.order.OrderRequestDto;
+import com.teamnine.humanofdelivery.dto.order.OrderResponseDto;
 import com.teamnine.humanofdelivery.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

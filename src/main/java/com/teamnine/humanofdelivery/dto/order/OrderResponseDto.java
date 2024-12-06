@@ -1,6 +1,6 @@
-package com.teamnine.humanofdelivery.dto;
+package com.teamnine.humanofdelivery.dto.order;
 
-import com.teamnine.humanofdelivery.OrderStatus;
+import com.teamnine.humanofdelivery.status.OrderStatus;
 import com.teamnine.humanofdelivery.entity.Order;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

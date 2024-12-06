@@ -1,6 +1,6 @@
 package com.teamnine.humanofdelivery.service;
 
-import com.teamnine.humanofdelivery.OrderStatus;
+import com.teamnine.humanofdelivery.status.OrderStatus;
 import com.teamnine.humanofdelivery.dto.ReviewRequestDto;
 import com.teamnine.humanofdelivery.dto.ReviewResponseDto;
 import com.teamnine.humanofdelivery.entity.Member;
