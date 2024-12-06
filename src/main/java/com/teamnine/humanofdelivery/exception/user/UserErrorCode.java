@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum UserErrorCode {
+    LOGIN_REQUIRED("401", "로그인 해주세요."),
     PERMISSION_DENIED("403", "권한이 없습니다."),
     RESPONSE_INCORRECT("400", "잘못된 입력값입니다."),
     EMAIL_DUPLICATE("409", "이미 사용 중인 이메일입니다."),
