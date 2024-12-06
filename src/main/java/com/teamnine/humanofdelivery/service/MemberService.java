@@ -50,6 +50,9 @@ public class MemberService {
      */
     @Transactional
     public UserResponseDto signUp(SignupRequestDto dto) {
+        if (memberRepository.existsByEmail(dto.getEmail())) {
+            throw new UserException(UserErrorCode.EMAIL_DUPLICATE);
+        }
         String encodedPassword = passwordEncoder.encode(dto.getPassword());
         Member member = new Member(dto.getName(), dto.getEmail(), encodedPassword, dto.getRole());
         Member saveMember = memberRepository.save(member);
@@ -130,7 +133,7 @@ public class MemberService {
      * 회원 프로필 정보를 수정합니다.
      *
      * @param userId  수정하려는 회원의 ID
-     * @param updates 수정할 데이터 (이름, 이메일, 비밀번호 등)
+     * @param dto 수정할 데이터 (이름, 이메일, 비밀번호 등)
      * @param request 현재 HTTP 요청 객체
      * @return 수정된 회원 정보를 담은 UserResponseDto
      * @throws UserException 입력값이 잘못되었거나 권한이 없을 경우 예외 발생
@@ -139,7 +142,6 @@ public class MemberService {
     public UserResponseDto updateUserById(Long userId, MemberUpdateRequestDto dto, HttpServletRequest request) {
         Member findMember = memberRepository.findByIdOrElseThrow(userId);
         sessionUtils.checkAuthorization(findMember);
-
         checkPassword(dto.getPassword(), findMember);
 
         findMember.setName(dto.getName());
