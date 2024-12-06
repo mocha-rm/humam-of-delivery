@@ -1,6 +1,6 @@
 package com.teamnine.humanofdelivery.dto.store;
 
-import com.teamnine.humanofdelivery.dto.MenuResponseDto;
+import com.teamnine.humanofdelivery.dto.menu.MenuResponseDto;
 import com.teamnine.humanofdelivery.status.StoreStatus;
 import com.teamnine.humanofdelivery.entity.Store;
 import com.teamnine.humanofdelivery.entity.Menu;

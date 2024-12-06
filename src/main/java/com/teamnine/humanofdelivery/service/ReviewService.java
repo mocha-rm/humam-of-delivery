@@ -1,9 +1,9 @@
 package com.teamnine.humanofdelivery.service;
 
-import com.teamnine.humanofdelivery.OrderStatus;
+import com.teamnine.humanofdelivery.status.OrderStatus;
 import com.teamnine.humanofdelivery.common.SessionNames;
-import com.teamnine.humanofdelivery.dto.ReviewRequestDto;
-import com.teamnine.humanofdelivery.dto.ReviewResponseDto;
+import com.teamnine.humanofdelivery.dto.review.ReviewRequestDto;
+import com.teamnine.humanofdelivery.dto.review.ReviewResponseDto;
 import com.teamnine.humanofdelivery.entity.Member;
 import com.teamnine.humanofdelivery.entity.Order;
 import com.teamnine.humanofdelivery.entity.Review;
@@ -62,9 +62,6 @@ public class ReviewService {
                 throw new IllegalStateException("배달 완료된 주문만 리뷰 작성이 가능합니다.");
         }
 
-//        if(reviewRepository.existsByOrder_OrderId(reviewRequestDto.getOrderId())){
-//                throw new IllegalStateException(("해당 주문에 대한 리뷰는 이미 작성되었습니다."));
-//        }
 
         Store store = order.getStore();
 

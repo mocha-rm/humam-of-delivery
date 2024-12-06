@@ -1,7 +1,7 @@
 package com.teamnine.humanofdelivery.controller;
 
-import com.teamnine.humanofdelivery.dto.ReviewRequestDto;
-import com.teamnine.humanofdelivery.dto.ReviewResponseDto;
+import com.teamnine.humanofdelivery.dto.review.ReviewRequestDto;
+import com.teamnine.humanofdelivery.dto.review.ReviewResponseDto;
 import com.teamnine.humanofdelivery.service.ReviewService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;

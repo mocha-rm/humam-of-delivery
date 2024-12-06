@@ -1,8 +1,8 @@
 package com.teamnine.humanofdelivery.controller;
 
 
-import com.teamnine.humanofdelivery.dto.MenuRequestDto;
-import com.teamnine.humanofdelivery.dto.MenuResponseDto;
+import com.teamnine.humanofdelivery.dto.menu.MenuRequestDto;
+import com.teamnine.humanofdelivery.dto.menu.MenuResponseDto;
 import com.teamnine.humanofdelivery.service.MenuService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/menus")
+@RequestMapping("owner/menus")
 public class MenuController {
 
     private final MenuService menuService;
