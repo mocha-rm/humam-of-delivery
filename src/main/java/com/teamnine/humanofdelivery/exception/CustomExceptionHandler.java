@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 public class CustomExceptionHandler {
 
     @ExceptionHandler(UserException.class)
+
     public ResponseEntity<Map<String, Object>> handleCustomException(UserException ex) {
         return getMapResponseEntity("error", ex.getMessage(), ex.getUserErrorCode().getHttpStatus());
     }

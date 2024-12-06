@@ -1,12 +1,11 @@
 package com.teamnine.humanofdelivery.service;
 
 import com.teamnine.humanofdelivery.common.SessionNames;
-import com.teamnine.humanofdelivery.dto.MenuRequestDto;
-import com.teamnine.humanofdelivery.dto.MenuResponseDto;
+import com.teamnine.humanofdelivery.dto.menu.MenuRequestDto;
+import com.teamnine.humanofdelivery.dto.menu.MenuResponseDto;
 import com.teamnine.humanofdelivery.entity.Member;
 import com.teamnine.humanofdelivery.entity.Store;
 import com.teamnine.humanofdelivery.entity.Menu;
-import com.teamnine.humanofdelivery.enums.UserRole;
 import com.teamnine.humanofdelivery.repository.MemberRepository;
 import com.teamnine.humanofdelivery.repository.MenuRepository;
 import com.teamnine.humanofdelivery.repository.StoreRepository;
@@ -14,10 +13,8 @@ import com.teamnine.humanofdelivery.status.MenuStatus;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor

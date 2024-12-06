@@ -1,8 +1,6 @@
 package com.teamnine.humanofdelivery.dto.user;
 
-import com.teamnine.humanofdelivery.StoreStatus;
-import com.teamnine.humanofdelivery.entity.Member;
-import com.teamnine.humanofdelivery.entity.Store;
+import com.teamnine.humanofdelivery.status.StoreStatus;
 import com.teamnine.humanofdelivery.enums.UserRole;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

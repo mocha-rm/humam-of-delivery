@@ -1,6 +1,6 @@
-package com.teamnine.humanofdelivery.dto;
+package com.teamnine.humanofdelivery.dto.order;
 
-import com.teamnine.humanofdelivery.OrderStatus;
+import com.teamnine.humanofdelivery.status.OrderStatus;
 import com.teamnine.humanofdelivery.entity.Order;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class OrderResponseDto {
     public OrderResponseDto(Order order) {
         this.id = order.getId();
         this.storeId = order.getStore().getId();
-        this.userId = order.getUserId();
+        this.userId = order.getMember().getUserId();
         this.menuName = order.getMenuName();
         this.status = order.getOrderStatus();
         this.createdAt = order.getCreatedDate();
@@ -32,7 +32,7 @@ public class OrderResponseDto {
         return new OrderResponseDto(
                 order.getId(),
                 order.getStore().getId(),
-                order.getUserId(),
+                order.getMember().getUserId(),
                 order.getMenuName(),
                 order.getOrderStatus(),
                 order.getCreatedDate(),
