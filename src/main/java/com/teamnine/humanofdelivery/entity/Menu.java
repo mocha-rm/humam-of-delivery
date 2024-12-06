@@ -7,9 +7,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.engine.spi.Status;
 
-import java.time.LocalDateTime;
 
 @Getter
 @Entity

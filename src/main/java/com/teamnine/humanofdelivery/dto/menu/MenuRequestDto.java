@@ -1,8 +1,7 @@
-package com.teamnine.humanofdelivery.dto;
+package com.teamnine.humanofdelivery.dto.menu;
 
 
 import com.teamnine.humanofdelivery.entity.Menu;
-import com.teamnine.humanofdelivery.entity.Store;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;

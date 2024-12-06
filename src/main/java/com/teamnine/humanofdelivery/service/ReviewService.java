@@ -1,8 +1,9 @@
 package com.teamnine.humanofdelivery.service;
 
 import com.teamnine.humanofdelivery.status.OrderStatus;
-import com.teamnine.humanofdelivery.dto.ReviewRequestDto;
-import com.teamnine.humanofdelivery.dto.ReviewResponseDto;
+import com.teamnine.humanofdelivery.common.SessionNames;
+import com.teamnine.humanofdelivery.dto.review.ReviewRequestDto;
+import com.teamnine.humanofdelivery.dto.review.ReviewResponseDto;
 import com.teamnine.humanofdelivery.entity.Member;
 import com.teamnine.humanofdelivery.entity.Order;
 import com.teamnine.humanofdelivery.entity.Review;
@@ -30,12 +31,24 @@ public class ReviewService {
     private final StoreRepository storeRepository;
     private final MemberRepository memberRepository;
 
+    /**
+     * 로그인 세션에서 Member 정보를 가져옵니다.
+     * @param session HttpSession
+     * @return 로그인된 Member
+     */
+    private Member getMemberFromSession(HttpSession session) {
+        String email = (String) session.getAttribute(SessionNames.USER_AUTH);
+        if (email == null) {
+            throw new IllegalStateException("로그인 정보가 유효하지 않습니다. 다시 로그인해주세요.");
+        }
+        Member member = memberRepository.findByEmailOrElseThrow(email);
+        return member;
+    }
+
     public ReviewResponseDto createReview(ReviewRequestDto reviewRequestDto, HttpSession session) {
         // 로그인한 사용자 확인
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) {
-            throw new IllegalStateException("로그인이 필요합니다.");
-        }
+        Member member = getMemberFromSession(session);
+        Long userId = member.getUserId();
 
         // 주문 조회
         Order order = orderRepository.findById(reviewRequestDto.getOrderId()).orElseThrow(()->new EntityNotFoundException("주문을 찾을 수 없습니다"));
@@ -49,12 +62,8 @@ public class ReviewService {
                 throw new IllegalStateException("배달 완료된 주문만 리뷰 작성이 가능합니다.");
         }
 
-        if(reviewRepository.existsByOrder_OrderId(reviewRequestDto.getOrderId())){
-                throw new IllegalStateException(("해당 주문에 대한 리뷰는 이미 작성되었습니다."));
-        }
 
         Store store = order.getStore();
-        Member member = memberRepository.findById(userId).orElseThrow(()->new EntityNotFoundException(("해당 사용자를 찾을 수 없습니다")));
 
         Review review = Review.builder()
                 .store(store)
@@ -68,26 +77,20 @@ public class ReviewService {
     }
 
     public List<ReviewResponseDto> getStoreReviews(Long storeId, Integer minRate, Integer maxRate) {
-        List<Review> reviews;
+        if (minRate == null) minRate = 0;  // 최소 기본값 설정
+        if (maxRate == null) maxRate = 5;  // 최대 기본값 설정
 
-        if (minRate != null && maxRate != null) {
-            // 별점 범위가 지정된 경우
-            reviews = reviewRepository.findAllByStore_StoreIdAndRateBetweenOrderByCreatedAtDesc(storeId, minRate, maxRate);
-        } else {
-            // 별점 범위가 없는 경우 모든 리뷰 조회
-            reviews = reviewRepository.findAllByStore_StoreIdOrderByCreatedAtDesc(storeId);
-        }
-
+        List<Review> reviews = reviewRepository.findAllByStore_StoreIdAndRateBetweenOrderByCreatedAtDesc(storeId, minRate, maxRate);
         return reviews.stream().map(ReviewResponseDto::new).collect(Collectors.toList());
+
 
     }
 
     public ReviewResponseDto updateReview(Long reviewId, String content, int rate, HttpSession session) {
         // 로그인한 사용자 확인
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) {
-            throw new IllegalStateException("로그인이 필요합니다.");
-        }
+        Member member = getMemberFromSession(session);
+        Long userId = member.getUserId();
+
         //리뷰 조회
         Review review = reviewRepository.findById(reviewId).orElseThrow(()->new EntityNotFoundException("해당 리뷰를 찾을 수 없습니다"));
 
@@ -97,16 +100,14 @@ public class ReviewService {
         }
 
         //리뷰 수정
-        review.updateReview(content, rate);
+        review.updateReview(rate, content);
         return new ReviewResponseDto(reviewRepository.save(review));
     }
 
     public String deleteReview(Long reviewId, HttpSession session) {
         // 로그인한 사용자 확인
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) {
-            throw new IllegalStateException("로그인이 필요합니다.");
-        }
+        Member member = getMemberFromSession(session);
+        Long userId = member.getUserId();
 
 
         //리뷰 조회

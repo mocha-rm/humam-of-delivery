@@ -1,4 +1,4 @@
-package com.teamnine.humanofdelivery.dto;
+package com.teamnine.humanofdelivery.dto.menu;
 
 import com.teamnine.humanofdelivery.entity.Menu;
 import com.teamnine.humanofdelivery.status.MenuStatus;
