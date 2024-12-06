@@ -41,7 +41,7 @@ public class ReviewService {
         Order order = orderRepository.findById(reviewRequestDto.getOrderId()).orElseThrow(()->new EntityNotFoundException("주문을 찾을 수 없습니다"));
 
         // 로그인한 사용자가 주문의 주인인지 확인
-        if (!order.getUserId().equals(userId)) {
+        if (!order.getMember().getUserId().equals(userId)) {
             throw new IllegalStateException("본인의 주문에 대해서만 리뷰를 작성할 수 있습니다.");
         }
 

@@ -62,7 +62,7 @@ public class OrderService {
             throw new OrderException(OrderErrorCode.ORDER_ERROR_USER_02);
         }
 
-        Order order = new Order(findStore, findMember.getUserId(), orderRequestDto.getMenuName(), OrderStatus.ORDER_COMPLETED);
+        Order order = new Order(findStore, findMember, orderRequestDto.getMenuName(), OrderStatus.ORDER_COMPLETED);
         orderRepository.save(order);
 
         return new OrderResponseDto(order);
