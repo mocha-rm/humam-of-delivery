@@ -10,28 +10,27 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/reviews")
 @RequiredArgsConstructor
 public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @PostMapping
+    @PostMapping("/users/reviews")
     public ReviewResponseDto createReview( @RequestBody ReviewRequestDto reviewRequestDto, HttpSession session) {
         return reviewService.createReview(reviewRequestDto, session);
     }
 
-    @GetMapping("/{storeId}")
+    @GetMapping("reviews/{storeId}")
     public List<ReviewResponseDto> getStoreReviews(@PathVariable Long storeId, @RequestParam(required = false) Integer minRate, @RequestParam(required = false) Integer maxRate) {
         return reviewService.getStoreReviews(storeId, minRate, maxRate);
     }
 
-    @PatchMapping("/{reviewId}")
+    @PatchMapping("/users/reviews/{reviewId}")
     public ReviewResponseDto updateReview(@PathVariable Long reviewId, @RequestBody ReviewRequestDto reviewRequestDto, HttpSession session) {
         return reviewService.updateReview(reviewId, reviewRequestDto.getContent(), reviewRequestDto.getRate(), session);
     }
 
-    @DeleteMapping("/{reviewId}")
+    @DeleteMapping("/users/reviews/{reviewId}")
     public String deleteReview(@PathVariable Long reviewId, HttpSession session) {
         return reviewService.deleteReview(reviewId, session);
     }
