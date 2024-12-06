@@ -37,6 +37,11 @@ public class OrderService {
     private final SessionUtils sessionUtils;
 
 
+    /**
+     * 주문 생성
+     * @param orderRequestDto 주문 생성에 필요한 정보(storeId, menuName, orderStatus)
+     * @return 생성된 주문 정보(id, storeId, userId, menuName, status, createdAt, modifiedAt)
+     */
     @Transactional
     public OrderResponseDto create(OrderRequestDto orderRequestDto) {
         Member findMember = memberRepository.findByEmailOrElseThrow(sessionUtils.getLoginUserEmail());
@@ -62,12 +67,18 @@ public class OrderService {
             throw new OrderException(OrderErrorCode.ORDER_ERROR_USER_02);
         }
 
-        Order order = new Order(findStore, findMember.getUserId(), orderRequestDto.getMenuName(), OrderStatus.ORDER_COMPLETED);
+        Order order = new Order(findStore, findMember, orderRequestDto.getMenuName(), OrderStatus.ORDER_COMPLETED);
         orderRepository.save(order);
 
         return new OrderResponseDto(order);
     }
 
+    /**
+     * 주문 상태 변경
+     * @param id (주문 id)
+     * @param orderRequestDto 주문 상태 변경에 필요한 정보(orderStatus)
+     * @return 수정된 주문 정보(id, storeId, userId, menuName, status, createdAt, modifiedAt)
+     */
     @Transactional
     public OrderResponseDto patchOrderStatus(Long id, OrderRequestDto orderRequestDto) {
         Member findMember = memberRepository.findByEmailOrElseThrow(sessionUtils.getLoginUserEmail());
@@ -95,6 +106,10 @@ public class OrderService {
         return new OrderResponseDto(findOrder);
     }
 
+    /**
+     * 주문 내역 조회
+     * @return 주문이 완료된 목록
+     */
     public List<OrderResponseDto> findAll() {
         return orderRepository.findAll().stream().map(OrderResponseDto::toDto).toList();
     }
