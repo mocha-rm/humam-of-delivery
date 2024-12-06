@@ -1,5 +1,9 @@
 package com.teamnine.humanofdelivery.service;
 
+import com.teamnine.humanofdelivery.exception.order.OrderErrorCode;
+import com.teamnine.humanofdelivery.exception.order.OrderException;
+import com.teamnine.humanofdelivery.exception.review.ReviewErrorCode;
+import com.teamnine.humanofdelivery.exception.review.ReviewException;
 import com.teamnine.humanofdelivery.status.OrderStatus;
 import com.teamnine.humanofdelivery.common.SessionNames;
 import com.teamnine.humanofdelivery.dto.review.ReviewRequestDto;
@@ -51,15 +55,15 @@ public class ReviewService {
         Long userId = member.getUserId();
 
         // 주문 조회
-        Order order = orderRepository.findById(reviewRequestDto.getOrderId()).orElseThrow(()->new EntityNotFoundException("주문을 찾을 수 없습니다"));
+        Order order = orderRepository.findById(reviewRequestDto.getOrderId()).orElseThrow(()->new OrderException(OrderErrorCode.ORDER_NOT_FOUND));
 
         // 로그인한 사용자가 주문의 주인인지 확인
         if (!order.getMember().getUserId().equals(userId)) {
-            throw new IllegalStateException("본인의 주문에 대해서만 리뷰를 작성할 수 있습니다.");
+            throw new ReviewException(ReviewErrorCode.REVIEW_ERROR_AUTHORIZATION_01);
         }
 
         if(!order.getOrderStatus().equals(OrderStatus.DELIVERY_COMPLETED)){
-                throw new IllegalStateException("배달 완료된 주문만 리뷰 작성이 가능합니다.");
+                throw new ReviewException(ReviewErrorCode.REVIEW_ERROR_STATUS_01);
         }
 
 
@@ -92,11 +96,11 @@ public class ReviewService {
         Long userId = member.getUserId();
 
         //리뷰 조회
-        Review review = reviewRepository.findById(reviewId).orElseThrow(()->new EntityNotFoundException("해당 리뷰를 찾을 수 없습니다"));
+        Review review = reviewRepository.findById(reviewId).orElseThrow(()->new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND));
 
         //로그인한 사용자가 리뷰 작성자인지 확인
         if (!review.getMember().getUserId().equals(userId)) {
-            throw new IllegalStateException("본인의 리뷰만 수정할 수 있습니다.");
+            throw new ReviewException(ReviewErrorCode.REVIEW_ERROR_AUTHORIZATION_02);
         }
 
         //리뷰 수정
@@ -111,11 +115,11 @@ public class ReviewService {
 
 
         //리뷰 조회
-        Review review = reviewRepository.findById(reviewId).orElseThrow(()->new EntityNotFoundException("해당 리뷰를 찾을 수 없습니다"));
+        Review review = reviewRepository.findById(reviewId).orElseThrow(()->new ReviewException(ReviewErrorCode.REVIEW_NOT_FOUND));
 
         // 로그인한 사용자가 리뷰 작성자인지 확인
         if (!review.getMember().getUserId().equals(userId)) {
-            throw new IllegalStateException("본인의 리뷰만 삭제할 수 있습니다.");
+            throw new ReviewException(ReviewErrorCode.REVIEW_ERROR_AUTHORIZATION_03);
         }
 
         reviewRepository.delete(review);
