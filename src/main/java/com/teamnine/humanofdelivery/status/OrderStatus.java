@@ -1,4 +1,4 @@
-package com.teamnine.humanofdelivery;
+package com.teamnine.humanofdelivery.status;
 
 public enum OrderStatus {
     ORDER_COMPLETED,
