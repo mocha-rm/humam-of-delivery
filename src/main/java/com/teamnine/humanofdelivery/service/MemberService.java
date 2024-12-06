@@ -140,8 +140,17 @@ public class MemberService {
      * @apiNote 수정 가능한 키(name, email, password)만 허용됩니다.
      */
     public UserResponseDto updateUserById(Long userId, MemberUpdateRequestDto dto, HttpServletRequest request) {
+        String loginUserEmail = sessionUtils.getLoginUserEmail();
+
+        Member loginMember = memberRepository.findByEmailOrElseThrow(loginUserEmail);
+        sessionUtils.checkAuthorization(loginMember);
+
+        if (!loginMember.getUserId().equals(userId)) {
+            throw new UserException(UserErrorCode.PERMISSION_DENIED); // 권한이 없으면 예외 발생
+        }
+
         Member findMember = memberRepository.findByIdOrElseThrow(userId);
-        sessionUtils.checkAuthorization(findMember);
+
         checkPassword(dto.getPassword(), findMember);
 
         findMember.setName(dto.getName());
