@@ -45,7 +45,7 @@ public class Review extends BaseEntity {
     }
 
     // 메뉴 정보 수정 메서드
-    public void updateReview(String content, Integer rate) {
+    public void updateReview(Integer rate, String content) {
         this.content = content;
         this.rate = rate;
     }

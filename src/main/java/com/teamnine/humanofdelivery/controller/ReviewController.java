@@ -22,13 +22,13 @@ public class ReviewController {
     }
 
     @GetMapping("/{storeId}")
-    public List<ReviewResponseDto> getStoreReviews(@PathVariable Long storeId, @RequestParam(required = false) int minRate, @RequestParam(required = false) int maxRate) {
+    public List<ReviewResponseDto> getStoreReviews(@PathVariable Long storeId, @RequestParam(required = false) Integer minRate, @RequestParam(required = false) Integer maxRate) {
         return reviewService.getStoreReviews(storeId, minRate, maxRate);
     }
 
     @PatchMapping("/{reviewId}")
-    public ReviewResponseDto updateReview(@PathVariable Long reviewId, @RequestParam String content, @RequestParam int rate, HttpSession session) {
-        return reviewService.updateReview(reviewId, content, rate, session);
+    public ReviewResponseDto updateReview(@PathVariable Long reviewId, @RequestBody ReviewRequestDto reviewRequestDto, HttpSession session) {
+        return reviewService.updateReview(reviewId, reviewRequestDto.getContent(), reviewRequestDto.getRate(), session);
     }
 
     @DeleteMapping("/{reviewId}")
