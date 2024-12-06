@@ -11,7 +11,6 @@ import com.teamnine.humanofdelivery.entity.Store;
 import com.teamnine.humanofdelivery.repository.MemberRepository;
 import com.teamnine.humanofdelivery.repository.OrderRepository;
 import com.teamnine.humanofdelivery.repository.ReviewRepository;
-import com.teamnine.humanofdelivery.repository.StoreRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
