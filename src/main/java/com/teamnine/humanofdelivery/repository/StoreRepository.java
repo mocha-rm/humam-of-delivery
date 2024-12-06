@@ -52,7 +52,7 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
      * @param ownerId (유저 id)
      * @return 유저가 소유한 스토어의 카운트
      */
-    @Query("SELECT COUNT(s) FROM Store s WHERE s.member.userId = :ownerId AND s.status <> 'SHUTDOWN'")
+    @Query("SELECT COUNT(s) FROM Store s WHERE s.member.userId = :ownerId AND s.status <> 'SHUT'")
     long countActiveStoresByOwnerId(@Param("ownerId") Long ownerId);
 }
 
