@@ -35,7 +35,7 @@ public class StoreService {
         Member findMember = getAuthorizedMember();
 
         if (findMember.getRole() != UserRole.OWNER) {
-            throw new StoreException(StoreErrorCode.STORE_ERROR_USER_01);
+            throw new StoreException(StoreErrorCode.STORE_ERROR_AUTHORIZATION_01);
         } else if (storeRepository.findOpenStore(StoreStatus.OPEN, findMember.getUserId()) >= 3) {
             throw new StoreException(StoreErrorCode.STORE_ERROR_OWNER_01);
         }
@@ -62,9 +62,9 @@ public class StoreService {
 
         Store findStore = getStore(id);
         if (!Objects.equals(findMember.getUserId(), findStore.getMember().getUserId())) {
-            throw new StoreException(StoreErrorCode.STORE_ERROR_OWNER_02);
+            throw new StoreException(StoreErrorCode.STORE_ERROR_AUTHORIZATION_02);
         } else if (storeStatus.equals(findStore.getStatus())) {
-            throw new StoreException(StoreErrorCode.STORE_ERROR_OWNER_03);
+            throw new StoreException(StoreErrorCode.STORE_ERROR_OWNER_02);
         }
 
         findStore.patchStatus(storeStatus);

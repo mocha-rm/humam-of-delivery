@@ -1,5 +1,6 @@
 package com.teamnine.humanofdelivery.exception;
 
+import com.teamnine.humanofdelivery.exception.order.OrderException;
 import com.teamnine.humanofdelivery.exception.store.StoreException;
 import com.teamnine.humanofdelivery.exception.user.UserException;
 import org.springframework.http.HttpStatus;
@@ -15,32 +16,32 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(UserException.class)
     public ResponseEntity<Map<String, String>> handleCustomException(UserException ex) {
-
-        Map<String, String> response = new HashMap<>();
-        response.put("error", ex.getMessage());
-
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(response);
+        return getMapResponseEntity("error", ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, String>> handleIllegalArgumentException(IllegalArgumentException ex) {
-        Map<String, String> response = new HashMap<>();
-        response.put("error", ex.getMessage());
-
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(response);
+        return getMapResponseEntity("error", ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(StoreException.class)
     public ResponseEntity<Map<String, String>> handleStoreException(StoreException ex) {
+        return getMapResponseEntity(ex.getStoreErrorCode().toString(), ex.getMessage(), ex.getStoreErrorCode().getHttpStatus());
+    }
+
+    @ExceptionHandler(OrderException.class)
+    public ResponseEntity<Map<String, String>> handleOrderException(OrderException ex) {
+        return getMapResponseEntity(ex.getOrderErrorCode().toString(), ex.getMessage(), ex.getOrderErrorCode().getHttpStatus());
+    }
+
+
+
+    private static ResponseEntity<Map<String, String>> getMapResponseEntity(String errorName, String errorMessage, HttpStatus httpStatus) {
         Map<String, String> response = new HashMap<>();
-        response.put(ex.getStoreErrorCode().toString(), ex.getMessage());
+        response.put(errorName, errorMessage);
 
         return ResponseEntity
-                .status(ex.getStoreErrorCode().getHttpStatus())
+                .status(httpStatus)
                 .body(response);
     }
 }
