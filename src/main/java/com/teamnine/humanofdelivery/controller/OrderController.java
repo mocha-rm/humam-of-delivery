@@ -12,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/orders")
 public class OrderController {
     private final OrderService orderService;
 
@@ -21,7 +20,7 @@ public class OrderController {
      * @param orderRequestDto (주문 생성에 필요한 정보 전달)
      * @return 주문 정보
      */
-    @PostMapping
+    @PostMapping("/user/orders")
     public ResponseEntity<OrderResponseDto> createOrder(@RequestBody OrderRequestDto orderRequestDto) {
         OrderResponseDto order = orderService.create(orderRequestDto);
         return new ResponseEntity<>(order, HttpStatus.CREATED);
@@ -33,7 +32,7 @@ public class OrderController {
      * @param orderRequestDto (주문 상태)
      * @return 수정된 주문 정보
      */
-    @PatchMapping("/{id}")
+    @PatchMapping("/owner/orders/{id}")
     public ResponseEntity<OrderResponseDto> patchOrderStatus(@PathVariable Long id, @RequestBody OrderRequestDto orderRequestDto) {
         OrderResponseDto order = orderService.patchOrderStatus(id, orderRequestDto);
         return new ResponseEntity<>(order, HttpStatus.OK);
@@ -43,7 +42,7 @@ public class OrderController {
      * 주문 조회
      * @return 주문이 완료된 목록
      */
-    @GetMapping
+    @GetMapping("/orders")
     public ResponseEntity<List<OrderResponseDto>> viewOrders() {
         List<OrderResponseDto> orders = orderService.findAll();
         return new ResponseEntity<>(orders, HttpStatus.OK);

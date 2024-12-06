@@ -47,10 +47,6 @@ public class OrderService {
         Member findMember = memberRepository.findByEmailOrElseThrow(sessionUtils.getLoginUserEmail());
         sessionUtils.checkAuthorization(findMember);
 
-        if (findMember.getRole().equals(UserRole.OWNER)) {
-            throw new OrderException(OrderErrorCode.ORDER_ERROR_AUTHORIZATION_01);
-        }
-
         Store findStore = storeRepository.findById(orderRequestDto.getStoreId()).orElseThrow(() ->
                 new StoreException(StoreErrorCode.STORE_NOT_FOUND)
         );
@@ -83,10 +79,6 @@ public class OrderService {
     public OrderResponseDto patchOrderStatus(Long id, OrderRequestDto orderRequestDto) {
         Member findMember = memberRepository.findByEmailOrElseThrow(sessionUtils.getLoginUserEmail());
         sessionUtils.checkAuthorization(findMember);
-
-        if (findMember.getRole().equals(UserRole.USER)) {
-            throw new OrderException(OrderErrorCode.ORDER_ERROR_AUTHORIZATION_02);
-        }
 
         Order findOrder = orderRepository.findById(id).orElseThrow(() ->
                 new OrderException(OrderErrorCode.ORDER_NOT_FOUND)

@@ -13,7 +13,6 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/store")
 public class StoreController {
     private final StoreService storeService;
 
@@ -22,7 +21,7 @@ public class StoreController {
      * @param storeRequestDto (스토어 생성에 필요한 정보 전달)
      * @return 생성된 스토어 정보
      */
-    @PostMapping
+    @PostMapping("/owner/stores")
     public ResponseEntity<StoreResponseDto> createStore(@RequestBody StoreRequestDto storeRequestDto) {
         StoreResponseDto createdStore = storeService.create(storeRequestDto);
         return new ResponseEntity<>(createdStore, HttpStatus.CREATED);
@@ -33,7 +32,7 @@ public class StoreController {
      * @param name (검색할 키워드를 받는 파라미터)
      * @return 이름이 포함된 스토어 목록
      */
-    @GetMapping
+    @GetMapping("/stores")
     public ResponseEntity<List<StoreResponseDto>> searchStores(@RequestParam String name) {
         List<StoreResponseDto> stores = storeService.findAll(name);
         return new ResponseEntity<>(stores, HttpStatus.OK);
@@ -44,7 +43,7 @@ public class StoreController {
      * @param id (스토어 id)
      * @return 스토어 정보 및 메뉴목록
      */
-    @GetMapping("/{id}")
+    @GetMapping("/stores/{id}")
     public ResponseEntity<StoreWithMenusResponseDto> viewStore(@PathVariable Long id) {
         return new ResponseEntity<>(storeService.findStore(id), HttpStatus.OK);
     }
@@ -55,7 +54,7 @@ public class StoreController {
      * @param storeRequestDto (스토어 폐업에 필요한 정보 전달)
      * @return 폐업된 스토어 정보
      */
-    @PatchMapping("/{id}")
+    @PatchMapping("/owner/stores/{id}")
     public ResponseEntity<StoreResponseDto> storeShutdown(@PathVariable Long id, @RequestBody StoreRequestDto storeRequestDto) {
         StoreResponseDto store = storeService.patchStoreStatus(id, storeRequestDto.getStatus());
         return new ResponseEntity<>(store, HttpStatus.OK);
