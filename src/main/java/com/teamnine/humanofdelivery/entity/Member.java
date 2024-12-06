@@ -1,8 +1,8 @@
 package com.teamnine.humanofdelivery.entity;
 
+import com.teamnine.humanofdelivery.config.role.MemberRole;
 import com.teamnine.humanofdelivery.entity.base.BaseEntity;
-import com.teamnine.humanofdelivery.enums.UserRole;
-import com.teamnine.humanofdelivery.enums.UserStatus;
+import com.teamnine.humanofdelivery.status.UserStatus;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -35,16 +35,16 @@ public class Member extends BaseEntity {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private UserRole role;
+    private MemberRole role;
 
 
-    public Member(String name, String email, UserRole role) {
+    public Member(String name, String email, MemberRole role) {
         this.name = name;
         this.email = email;
         this.role = role;
     }
 
-    public Member(String name, String email, String password, UserRole role) {
+    public Member(String name, String email, String password, MemberRole role) {
         this.name = name;
         this.email = email;
         this.password = password;

@@ -1,8 +1,7 @@
 package com.teamnine.humanofdelivery.config.interceptor;
 
 import com.teamnine.humanofdelivery.common.SessionNames;
-import com.teamnine.humanofdelivery.entity.Member;
-import com.teamnine.humanofdelivery.enums.UserRole;
+import com.teamnine.humanofdelivery.config.role.MemberRole;
 import com.teamnine.humanofdelivery.exception.user.UserErrorCode;
 import com.teamnine.humanofdelivery.exception.user.UserException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,7 +9,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import java.nio.file.AccessDeniedException;
 
 @Component
 public class OwnerRoleInterceptor implements HandlerInterceptor {
@@ -37,8 +35,8 @@ public class OwnerRoleInterceptor implements HandlerInterceptor {
             throw new UserException(UserErrorCode.LOGIN_REQUIRED);
         }
 
-        UserRole role = (UserRole) session.getAttribute(SessionNames.USER_ROLE);
-        if (role != UserRole.OWNER) {
+        MemberRole role = (MemberRole) session.getAttribute(SessionNames.USER_ROLE);
+        if (role != MemberRole.OWNER) {
             throw new UserException(UserErrorCode.PERMISSION_DENIED);
         }
         return true;

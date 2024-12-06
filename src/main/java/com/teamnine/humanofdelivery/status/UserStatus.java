@@ -1,4 +1,4 @@
-package com.teamnine.humanofdelivery.enums;
+package com.teamnine.humanofdelivery.status;
 
 public enum UserStatus {
     DELETED,

@@ -1,7 +1,6 @@
 package com.teamnine.humanofdelivery.dto.user;
 
-import com.teamnine.humanofdelivery.enums.UserRole;
-import jakarta.validation.constraints.Email;
+import com.teamnine.humanofdelivery.config.role.MemberRole;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -28,5 +27,5 @@ public class SignupRequestDto {
     private final String password;
 
     @NotNull(message = "역할 입력은 필수 입니다.")
-    private final UserRole role;
+    private final MemberRole role;
 }
