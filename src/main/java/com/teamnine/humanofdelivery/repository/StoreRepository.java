@@ -12,20 +12,46 @@ import java.util.Optional;
 
 @Repository
 public interface StoreRepository extends JpaRepository<Store, Long> {
+    /**
+     * 이름으로 폐업상태가 아닌 스토어 모두 반환
+     * @param name (이름)
+     * @param storeStatus (스토어 상태, OPEN, SHUT)
+     * @return 스토어 리스트
+     */
     @Query("select s from Store s where s.name like %:name% and s.status <> :status")
     List<Store> findAllByStoreName(@Param("name") String name, @Param("status") StoreStatus storeStatus);
 
+    /**
+     * 유저가 가지고 있는 오픈된 스토어의 갯수 반환
+     * @param storeStatus (스토어 상태, OPEN, SHUT)
+     * @param userId (유저 id)
+     * @return 유저가 가지고 있는 오픈된 스토어의 갯수
+     */
     @Query("select count(s) from Store s where s.status = :status and s.member.userId = :userId")
     int findOpenStore(@Param("status") StoreStatus storeStatus, @Param("userId") Long userId);
 
+    /**
+     * userId와 storeId가 일치하는 스토어 반환
+     * @param memberId (유저 id)
+     * @param storeId (스토어 id)
+     * @return userId와 storeId가 일치하는 스토어
+     */
     @Query("SELECT s FROM Store s WHERE s.member.userId = :memberId AND s.id = :storeId")
     Optional<Store> findByMember_IdAndId(@Param("memberId") Long memberId, @Param("storeId") Long storeId);
 
-    // 사장의 store 조회
+    /**
+     * 유저가 소유한 스토어 반환
+     * @param ownerId (유저 id)
+     * @return 소유한 스토어 리스트
+     */
     @Query("select s from Store s where s.member.userId = :ownerId")
     List<Store> findAllByOwnerId(@Param("ownerId") Long ownerId);
 
-    // SHUT DOWN 상태가 아닌 가게 조회
+    /**
+     * 폐업상태가 아닌 스토어 조회
+     * @param ownerId (유저 id)
+     * @return 유저가 소유한 스토어의 카운트
+     */
     @Query("SELECT COUNT(s) FROM Store s WHERE s.member.userId = :ownerId AND s.status <> 'SHUTDOWN'")
     long countActiveStoresByOwnerId(@Param("ownerId") Long ownerId);
 }
