@@ -1,4 +1,4 @@
-package com.teamnine.humanofdelivery.dto;
+package com.teamnine.humanofdelivery.dto.review;
 
 
 import com.teamnine.humanofdelivery.entity.Review;
