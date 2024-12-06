@@ -39,8 +39,8 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
 
-    private static final String[] OWNER_ROLE_REQUIRED_PATH_PATTERNS = {"/owner/*"};
-    private static final String[] USER_ROLE_REQUIRED_PATH_PATTERNS = {"/user/*"};
+    private static final String[] OWNER_ROLE_REQUIRED_PATH_PATTERNS = {"/owner/**"};
+    private static final String[] USER_ROLE_REQUIRED_PATH_PATTERNS = {"/user/**"};
 
     private final OwnerRoleInterceptor ownerRoleInterceptor;
     private final UserRoleInterceptor userRoleInterceptor;
