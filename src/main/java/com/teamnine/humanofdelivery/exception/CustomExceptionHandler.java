@@ -15,30 +15,29 @@ import java.util.Map;
 public class CustomExceptionHandler {
 
     @ExceptionHandler(UserException.class)
-    public ResponseEntity<Map<String, String>> handleCustomException(UserException ex) {
-        return getMapResponseEntity("error", ex.getMessage(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Map<String, Object>> handleCustomException(UserException ex) {
+        return getMapResponseEntity("error", ex.getMessage(), ex.getUserErrorCode().getHttpStatus());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Map<String, String>> handleIllegalArgumentException(IllegalArgumentException ex) {
+    public ResponseEntity<Map<String, Object>> handleIllegalArgumentException(IllegalArgumentException ex) {
         return getMapResponseEntity("error", ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(StoreException.class)
-    public ResponseEntity<Map<String, String>> handleStoreException(StoreException ex) {
+    public ResponseEntity<Map<String, Object>> handleStoreException(StoreException ex) {
         return getMapResponseEntity(ex.getStoreErrorCode().toString(), ex.getMessage(), ex.getStoreErrorCode().getHttpStatus());
     }
 
     @ExceptionHandler(OrderException.class)
-    public ResponseEntity<Map<String, String>> handleOrderException(OrderException ex) {
+    public ResponseEntity<Map<String, Object>> handleOrderException(OrderException ex) {
         return getMapResponseEntity(ex.getOrderErrorCode().toString(), ex.getMessage(), ex.getOrderErrorCode().getHttpStatus());
     }
 
-
-
-    private static ResponseEntity<Map<String, String>> getMapResponseEntity(String errorName, String errorMessage, HttpStatus httpStatus) {
-        Map<String, String> response = new HashMap<>();
+    private static ResponseEntity<Map<String, Object>> getMapResponseEntity(String errorName, String errorMessage, HttpStatus httpStatus) {
+        Map<String, Object> response = new HashMap<>();
         response.put(errorName, errorMessage);
+        response.put("status", httpStatus);
 
         return ResponseEntity
                 .status(httpStatus)
