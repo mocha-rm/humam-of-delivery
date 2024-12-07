@@ -6,6 +6,10 @@ import com.teamnine.humanofdelivery.dto.menu.MenuResponseDto;
 import com.teamnine.humanofdelivery.entity.Member;
 import com.teamnine.humanofdelivery.entity.Store;
 import com.teamnine.humanofdelivery.entity.Menu;
+import com.teamnine.humanofdelivery.exception.menu.MenuErrorCode;
+import com.teamnine.humanofdelivery.exception.menu.MenuException;
+import com.teamnine.humanofdelivery.exception.store.StoreErrorCode;
+import com.teamnine.humanofdelivery.exception.store.StoreException;
 import com.teamnine.humanofdelivery.repository.MemberRepository;
 import com.teamnine.humanofdelivery.repository.MenuRepository;
 import com.teamnine.humanofdelivery.repository.StoreRepository;
@@ -48,7 +52,7 @@ public class MenuService {
 
         // Store 엔티티 조회 (Member가 소유한 Store)
         Store store = storeRepository.findByMember_IdAndId(memberId, requestDto.getStoreId())
-                .orElseThrow(() -> new EntityNotFoundException("해당 가게를 찾을 수 없습니다."));
+                .orElseThrow(() -> new StoreException(StoreErrorCode.STORE_NOT_FOUND));
 
         // Menu 객체 생성
         Menu menu = Menu.builder()
@@ -72,7 +76,7 @@ public class MenuService {
         Long storeId = (Long) session.getAttribute("storeId");
 
         // Menu 엔티티 조회
-        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new EntityNotFoundException("해당 메뉴를 찾을 수 없습니다."));
+        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new MenuException(MenuErrorCode.MENU_NOT_FOUND));
 
         // 엔티티 메서드를 통해 업데이트
         menu.updateMenu(requestDto.getMenuName(), requestDto.getPrice());
@@ -91,7 +95,7 @@ public class MenuService {
 
         // Menu 엔티티 조회
         Menu menu = menuRepository.findById(menuId)
-                .orElseThrow(() -> new EntityNotFoundException("해당 메뉴를 찾을 수 없습니다."));
+                .orElseThrow(() -> new MenuException(MenuErrorCode.MENU_NOT_FOUND));
 
         // 상태 변경
         menu.deleteMenu();
