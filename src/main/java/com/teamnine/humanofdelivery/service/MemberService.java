@@ -146,7 +146,7 @@ public class MemberService {
         sessionUtils.checkAuthorization(loginMember);
 
         if (!loginMember.getUserId().equals(userId)) {
-            throw new UserException(UserErrorCode.PERMISSION_DENIED); // 권한이 없으면 예외 발생
+            throw new UserException(UserErrorCode.PERMISSION_DENIED);
         }
 
         Member findMember = memberRepository.findByIdOrElseThrow(userId);

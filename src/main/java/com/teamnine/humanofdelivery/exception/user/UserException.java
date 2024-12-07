@@ -6,10 +6,10 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class UserException extends RuntimeException {
-    private final UserErrorCode  errorCode;
+    private final UserErrorCode userErrorCode;
 
     @Override
     public String getMessage() {
-        return errorCode.getMessage();
+        return userErrorCode.getMessage();
     }
 }
