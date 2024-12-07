@@ -15,7 +15,7 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @PostMapping("/users/reviews")
+    @PostMapping("/user/reviews")
     public ReviewResponseDto createReview( @RequestBody ReviewRequestDto reviewRequestDto, HttpSession session) {
         return reviewService.createReview(reviewRequestDto, session);
     }
@@ -25,12 +25,12 @@ public class ReviewController {
         return reviewService.getStoreReviews(storeId, minRate, maxRate);
     }
 
-    @PatchMapping("/users/reviews/{reviewId}")
+    @PatchMapping("/user/reviews/{reviewId}")
     public ReviewResponseDto updateReview(@PathVariable Long reviewId, @RequestBody ReviewRequestDto reviewRequestDto, HttpSession session) {
         return reviewService.updateReview(reviewId, reviewRequestDto.getContent(), reviewRequestDto.getRate(), session);
     }
 
-    @DeleteMapping("/users/reviews/{reviewId}")
+    @DeleteMapping("/user/reviews/{reviewId}")
     public String deleteReview(@PathVariable Long reviewId, HttpSession session) {
         return reviewService.deleteReview(reviewId, session);
     }
