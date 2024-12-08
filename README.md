@@ -179,3 +179,144 @@ USER : 일반유저
 
   
   "회원탈퇴가 완료되었습니다"
+
+#### 2. 가게 CRUD
+
+##### 가게 생성
+- **URL**: `/api/owner/stores`
+- **Method**: `POST`
+- **상태코드**: '201 CREATED, 401 UNAUTHORIZED, 403 FORBIDDEN'
+- OWNER 사용자만 생성 가능
+- **요청**
+
+
+
+  |이름|타입|설명|필수|
+  |:----:|:----:|:-------:|:--:|
+  |name|String|가게 이름|O|
+  |status|StoreStatus|영업 상태|O|
+  |minCost|Integer|최저 주문 금액|O|
+  |openAt|LocalTime|오픈 시간|O|
+  |closeAt|LocalTime|영업 종료 시간|O|
+  
+
+  ```json
+  {
+    "name": "맛있는 가게",
+    "status": "OPEN",
+    "minCost": "14000",
+    "openAt": "10:00",
+    "closeAt": "21:00"
+  }
+- **응답**
+
+  
+  |이름|타입|설명|
+  |:----:|:----:|:-------:|
+  |id|Long|가게 아이디|
+  |name|String|가게 이름|
+  |status|StoreStatus|영업 상태|
+  |minCost|Integer|최저 주문 금액|
+  |openAt|LocalTime|오픈 시간|
+  |closeAt|LocalTime|영업 종료 시간|
+  |createdAt|LocalDateTime|회원 생성 날짜 저장|
+  |modifiedAt|LocalDateTime|회원 수정 날짜 저장|
+  
+  ```json
+  {
+    "id": 3,
+    "name": "맛있는가게",
+    "status": "OPEN",
+    "minCost": 14000,
+    "openAt": "10:00:00",
+    "closeAt": "21:00:00",
+    "createdAt": "2024-12-08T16:37:25.317133",
+    "modifiedAt": "2024-12-08T16:37:25.317133"
+  }
+
+
+##### 가게 다건 조회
+- **URL**: `/api/stores?name=””`
+- **Method**: `GET`
+- **상태코드**: 200 OK
+
+- **응답**
+
+  
+  |이름|타입|설명|
+  |:----:|:----:|:-------:|
+  |id|Long|가게 아이디|
+  |name|String|가게 이름|
+  |status|StoreStatus|영업 상태|
+  |minCost|Integer|최저 주문 금액|
+  |openAt|LocalTime|오픈 시간|
+  |closeAt|LocalTime|영업 종료 시간|
+  |createdAt|LocalDateTime|회원 생성 날짜 저장|
+  |modifiedAt|LocalDateTime|회원 수정 날짜 저장|
+  ```json
+  {
+    [
+        {
+            "id": 1,
+            "name": "맛있는가게",
+            "status": "OPEN",
+            "minCost": 14000,
+            "openAt": "10:00:00",
+            "closeAt": "21:00:00",
+            "createdAt": "2024-12-08T16:37:25.317133",
+            "modifiedAt": "2024-12-08T16:37:25.317133"
+        },
+        {
+            "id": 2,
+            "name": "맛있는가게",
+            "status": "OPEN",
+            "minCost": 14000,
+            "openAt": "10:00:00",
+            "closeAt": "21:00:00",
+            "createdAt": "2024-12-08T16:37:25.317133",
+            "modifiedAt": "2024-12-08T16:37:25.317133"
+        }
+    ]
+  }
+
+
+##### 가게 수정
+- **URL**: `/api/stores/{id}`
+- **Method**: `PATCH`
+- **상태코드**: 200 OK, 400 BAD REQUEST, 401 UNAUTHORIZED, 404 NOT FOUND
+- **요청**
+
+
+
+  |이름|타입|설명|필수|
+  |:----:|:----:|:-------:|:--:|
+  |status|StoreStatus|영업 상태|O|
+
+  ```json
+  {
+    "status": "SHUT",
+  }
+- **응답**
+
+  
+  |이름|타입|설명|
+  |:----:|:----:|:-------:|
+  |id|Long|가게 아이디|
+  |name|String|가게 이름|
+  |status|StoreStatus|영업 상태|
+  |minCost|Integer|최저 주문 금액|
+  |openAt|LocalTime|오픈 시간|
+  |closeAt|LocalTime|영업 종료 시간|
+  |createdAt|LocalDateTime|회원 생성 날짜 저장|
+  |modifiedAt|LocalDateTime|회원 수정 날짜 저장|
+  ```json
+  {
+    "id": 1,
+    "name": "맛있는가게",
+    "status": "SHUT",
+    "minCost": 14000,
+    "openAt": "10:00:00",
+    "closeAt": "21:00:00",
+    "createdAt": "2024-12-08T16:37:25.317133",
+    "modifiedAt": "2024-12-08T16:37:25.317133"
+  }
