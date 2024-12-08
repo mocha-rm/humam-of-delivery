@@ -531,8 +531,8 @@ USER : 일반유저
   |menuid|Long|메뉴 아이디|
   |menuName|String|메뉴 이름|
   |price|Integer|가격|
-  |createdAt|LocalDateTime|주문 생성 날짜 저장|
-  |modifiedAt|LocalDateTime|주문 수정 날짜 저장|
+  |createdAt|LocalDateTime|주문 생성 날짜|
+  |modifiedAt|LocalDateTime|주문 수정 날짜 |
   
   ```json
   {
@@ -554,3 +554,173 @@ USER : 일반유저
 
   "삭제 되었습니다"
 
+
+
+  #### 5. 리뷰 CRUD
+
+##### 리뷰 생성
+- **URL**: `/api/user/reviews`
+- **Method**: `POST`
+- **상태코드**: '201 CREATED, 400 BAD REQUEST, 401 UNAUTHORIZED
+- OWNER 사용자만 생성 가능
+- **요청**
+
+
+
+  |이름|타입|설명|필수|
+  |:----:|:----:|:-------:|:--:|
+  |orderId|Long|주문 아이디|O|
+  |rate|Integer|별점|O|
+  |content|String|내용|O|
+  
+ 
+  
+
+  ```json
+  {
+    "orderId": 1,
+    "rate": 5,
+    "content": "음식이 정말 맛있었어요!"
+  }
+- **응답**
+
+  
+  |이름|타입|설명|
+  |:----:|:----:|:-------:|
+  |reviewId|Long|리뷰 아이디|
+  |orderId|Long|주문 아이디|
+  |storeId|Long|가게 아이디|
+  |rate|Integer|별점|
+  |content|String|내용|
+  |createdAt|LocalDateTime|리뷰 생성 날짜|
+  
+  ```json
+  {
+    ”reviewId”:1,
+    ”orderId”:1,
+    "storeId": 1,
+    "rate": 5,
+    "content": "음식이 정말 맛있었어요!",
+    "created_at": "2024-12-02T12:00:00"
+  }
+
+##### 리뷰 조회(가게 기준)
+- **URL**: `/api/reviews/{storeId}`
+- **Method**: `GET`
+- **상태코드**: '201 CREATED, 404 NOT FOUND, 401 UNAUTHORIZED
+- **응답**
+
+  ```json
+    
+  {
+    "storeId":1
+    "reviews":[
+      {
+        ”reviewId”:1,
+        ”orderId”:1,
+        "storeId": 1,
+        "rate": 5,
+        "content": "음식이 정말 맛있었어요!",
+        "created_at": "2024-12-02T12:00:00"
+      },
+      {
+        ”reviewId”:2,
+        ”orderId”:2,
+        "storeId": 1,
+        "rate": 5,
+        "content": "음식이 정말 맛있었어요!",
+        "created_at": "2024-12-02T12:00:00"
+      }
+    ]
+  }
+##### 리뷰 조회(별점 기준)
+- **URL**: `/api//reviews/{storeId}?minRate={migrate}&maxRate={maxRate}`
+- **Method**: `GET`
+- **상태코드**: '201 CREATED, 404 NOT FOUND, 401 UNAUTHORIZED
+- **응답**
+
+  ```json
+    
+  {
+    "storeId":1
+    "reviews":[
+      {
+        ”reviewId”:1,
+        ”orderId”:1,
+        "storeId": 1,
+        "rate": 5,
+        "content": "음식이 정말 맛있었어요!",
+        "created_at": "2024-12-02T12:00:00"
+      },
+      {
+        ”reviewId”:2,
+        ”orderId”:2,
+        "storeId": 1,
+        "rate": 5,
+        "content": "음식이 정말 맛있었어요!",
+        "created_at": "2024-12-02T12:00:00"
+      }
+    ]
+  }
+
+##### 리뷰 수정
+- **URL**: `/api/user/reviews/{reviewId}`
+- **Method**: `PATCH`
+- **상태코드**: '201 CREATED, 400 BAD REQUEST, 401 UNAUTHORIZED
+- OWNER 사용자만 생성 가능
+- **요청**
+
+
+
+  |이름|타입|설명|필수|
+  |:----:|:----:|:-------:|:--:|
+  |rate|Integer|별점|O|
+  |content|String|내용|O|
+  
+ 
+  
+
+  ```json
+  {
+    "rate": 2,
+    "content": "머리카락이 나왔어요"
+  }
+- **응답**
+
+  
+  |이름|타입|설명|
+  |:----:|:----:|:-------:|
+  |reviewId|Long|리뷰 아이디|
+  |orderId|Long|주문 아이디|
+  |storeId|Long|가게 아이디|
+  |rate|Integer|별점|
+  |content|String|내용|
+  |createdAt|LocalDateTime|리뷰 생성 날짜|
+  |modifiedAt|LocalDateTime|리뷰 수정 날짜|
+  
+  ```json
+  {
+    ”reviewId”:1,
+    ”orderId”:1,
+    "storeId": 1,
+    "rate": 2,
+    "content": "머리카락이 나왔어요",
+    "created_at": "2024-12-02T12:00:00",
+    "modified_at": "2024-12-02T14:00:00"
+  }
+
+##### 리뷰 삭제
+- **URL**: `/api//reviews/{reviewId}`
+- **Method**: `DELETE`
+- **상태코드**: '201 CREATED, 404 NOT FOUND, 401 UNAUTHORIZED
+- **응답**
+
+  "삭제 되었습니다"
+
+
+##와이어 프레임
+![Untitled](https://github.com/user-attachments/assets/ae2d0e0f-688c-44f6-95b0-9561d19cfdec)
+
+
+## ERD
+![배달의 인간-2](https://github.com/user-attachments/assets/b82d41fe-334d-4631-9999-03e65e05b08c)
