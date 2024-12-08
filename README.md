@@ -320,3 +320,135 @@ USER : 일반유저
     "createdAt": "2024-12-08T16:37:25.317133",
     "modifiedAt": "2024-12-08T16:37:25.317133"
   }
+
+#### 3. 주문 CRUD
+
+##### 주문 생성
+- **URL**: `/api/user/orders`
+- **Method**: `POST`
+- **상태코드**: '201 CREATED, 400 BAD REQUEST, 401 UNAUTHORIZED
+- USER 사용자만 생성 가능
+- **요청**
+
+
+
+  |이름|타입|설명|필수|
+  |:----:|:----:|:-------:|:--:|
+  |storeId|Long|가게 아이디|O|
+  |menuName|String|메뉴 이름|O|
+ 
+  
+
+  ```json
+  {
+    "storeId": 1,
+    "menuName": "부대전골",
+  }
+- **응답**
+
+  
+  |이름|타입|설명|
+  |:----:|:----:|:-------:|
+  |id|Long|주문 아이디|
+  |storeId|Long|가게 아이디|
+  |userId|Long|주문자 아이디|
+  |menuName|String|메뉴 이름|
+  |status|MenuStatus|배달 상태|
+  |createdAt|LocalDateTime|주문 생성 날짜 저장|
+  |modifiedAt|LocalDateTime|주문 수정 날짜 저장|
+  
+  ```json
+  {
+    "id": 2,
+    "storeId": 1,
+    "userId": 3,
+    "menuName": "부대전골",
+    "status": "ORDER_COMPLETED",
+    "createdAt": "2024-12-06T19:38:48.874986",
+    "modifiedAt": "2024-12-06T19:38:48.874986"
+  }
+##### 주문 조회
+- **URL**: `/api/orders`
+- **Method**: `GET`
+- **상태코드**: 200 OK
+
+- **응답**
+
+  
+  |이름|타입|설명|
+  |:----:|:----:|:-------:|
+  |id|Long|주문 아이디|
+  |storeId|Long|가게 아이디|
+  |userId|Long|주문자 아이디|
+  |menuName|String|메뉴 이름|
+  |status|MenuStatus|배달 상태|
+  |createdAt|LocalDateTime|주문 생성 날짜 저장|
+  |modifiedAt|LocalDateTime|주문 수정 날짜 저장|
+  ```json
+  [
+    {
+        "id": 1,
+        "storeId": 1,
+        "userId": 3,
+        "menuName": "부대전골",
+        "status": "DELIVERY_COMPLETED",
+        "createdAt": "2024-12-06T16:40:45.118041",
+        "modifiedAt": "2024-12-06T16:41:04.519476"
+    },
+    {
+        "id": 2,
+        "storeId": 1,
+        "userId": 3,
+        "menuName": "부대전골",
+        "status": "ORDER_COMPLETED",
+        "createdAt": "2024-12-06T19:38:48.874986",
+        "modifiedAt": "2024-12-06T19:38:48.874986"
+    }
+  ]
+##### 주문 수정
+- **URL**: `/api/owner/orders/{id}`
+- **Method**: `PATCH`
+- **상태코드**: '200 OK, 400 BAD REQUEST, 401 UNAUTHORIZED, 404 NOT FOUND
+- USER 사용자만 생성 가능
+- **요청**
+
+
+
+  |이름|타입|설명|필수|
+  |:----:|:----:|:-------:|:--:|
+  |storeId|Long|가게 아이디|O|
+  |menuName|String|메뉴 이름|X|
+  |price|Integer|가격|X|
+ 
+  
+
+  ```json
+  {
+    "storeId": 1
+    "menuName": "김치찌개",
+    "price": 8000
+  }
+
+- **응답**
+
+  
+  |이름|타입|설명|
+  |:----:|:----:|:-------:|
+  |id|Long|주문 아이디|
+  |storeId|Long|가게 아이디|
+  |userId|Long|주문자 아이디|
+  |menuName|String|메뉴 이름|
+  |status|MenuStatus|배달 상태|
+  |createdAt|LocalDateTime|주문 생성 날짜 저장|
+  |modifiedAt|LocalDateTime|주문 수정 날짜 저장|
+  
+  ```json
+  {
+    "id": 1,
+    "storeId": 1,
+    "userId": 1,
+    "menuName": "와퍼",
+    "status": "COOKING",
+    "createdAt": "2024-12-06T19:50:48.636194",
+    "modifiedAt": "2024-12-06T19:59:33.354738"
+  }
