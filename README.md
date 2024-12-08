@@ -381,7 +381,7 @@ USER : 일반유저
   |storeId|Long|가게 아이디|
   |userId|Long|주문자 아이디|
   |menuName|String|메뉴 이름|
-  |status|MenuStatus|배달 상태|
+  |status|OrderStatus|배달 상태|
   |createdAt|LocalDateTime|주문 생성 날짜 저장|
   |modifiedAt|LocalDateTime|주문 수정 날짜 저장|
   ```json
@@ -416,17 +416,14 @@ USER : 일반유저
 
   |이름|타입|설명|필수|
   |:----:|:----:|:-------:|:--:|
-  |storeId|Long|가게 아이디|O|
-  |menuName|String|메뉴 이름|X|
-  |price|Integer|가격|X|
+  |orderStatus|OrderStatus|가게 아이디|O|
+
  
   
 
   ```json
   {
-    "storeId": 1
-    "menuName": "김치찌개",
-    "price": 8000
+    "orderStatus": "COOKING"
   }
 
 - **응답**
@@ -452,3 +449,108 @@ USER : 일반유저
     "createdAt": "2024-12-06T19:50:48.636194",
     "modifiedAt": "2024-12-06T19:59:33.354738"
   }
+
+
+#### 4. 메뉴 CRUD
+
+##### 메뉴 생성
+- **URL**: `/api/owner/menus`
+- **Method**: `POST`
+- **상태코드**: '201 CREATED, 401 UNAUTHORIZED, 404 NOT FOUND
+- OWNER 사용자만 생성 가능
+- **요청**
+
+
+
+  |이름|타입|설명|필수|
+  |:----:|:----:|:-------:|:--:|
+  |storeId|Long|가게 아이디|O|
+  |menuName|String|메뉴 이름|O|
+  |price|Integer|가격|O|
+  
+ 
+  
+
+  ```json
+  {
+    "storeId": 1,
+    "menuName": "부대전골",
+    "price": 9000
+  }
+- **응답**
+
+  
+  |이름|타입|설명|
+  |:----:|:----:|:-------:|
+  |menuid|Long|메뉴 아이디|
+  |menuName|String|메뉴 이름|
+  |price|Integer|가격|
+  |createdAt|LocalDateTime|주문 생성 날짜 저장|
+  |modifiedAt|LocalDateTime|주문 수정 날짜 저장|
+  
+  ```json
+  {
+    "menuId": 10,
+    "menuName": "부대전골",
+    "price": 9000,
+    "status": "ACTIVE",
+    ”created_at": "2024-12-03T13:55:22.12587",
+    ”modified_at”: "2024-12-04T13:55:22.12587"
+  }
+
+
+##### 메뉴 수정
+- **URL**: `/api/owner/menus/{menuId}`
+- **Method**: `PATCH`
+- **상태코드**: '200 OK, 401 UNAUTHORIZED, 404 NOT FOUND
+- OWNER 사용자만 수정 가능
+- **요청**
+
+
+
+  |이름|타입|설명|필수|
+  |:----:|:----:|:-------:|:--:|
+  |storeId|Long|가게 아이디|O|
+  |menuName|String|메뉴 이름|O|
+  |price|Integer|가격|O|
+  
+ 
+  
+
+  ```json
+  {
+    "storeId": 1,
+    "menuName": "된장찌개",
+    "price": 9000
+  }
+- **응답**
+
+  
+  |이름|타입|설명|
+  |:----:|:----:|:-------:|
+  |menuid|Long|메뉴 아이디|
+  |menuName|String|메뉴 이름|
+  |price|Integer|가격|
+  |createdAt|LocalDateTime|주문 생성 날짜 저장|
+  |modifiedAt|LocalDateTime|주문 수정 날짜 저장|
+  
+  ```json
+  {
+    "menuId": 10,
+    "menuName": "된장찌개",
+    "price": 9000,
+    "status": "ACTIVE",
+    ”created_at": "2024-12-03T13:55:22.12587",
+    ”modified_at”: "2024-12-04T13:55:22.12587"
+  }
+
+
+##### 메뉴 삭제
+- **URL**: `/api/owner/menus/{menuId}`
+- **Method**: `DELETE`
+- **상태코드**: '200 OK, 401 UNAUTHORIZED, 404 NOT FOUND
+- OWNER 사용자만 삭제 가능
+- **응답**
+
+  "삭제 되었습니다"
+
